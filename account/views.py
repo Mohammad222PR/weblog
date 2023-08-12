@@ -41,8 +41,3 @@ def Register(request):
     return render(request, 'account/register.html', {})
 
 
-def Logout(request):
-    logout(request)
-    return redirect('home:home')
-
-
