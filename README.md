@@ -1,2 +1,2 @@
 # weblog
-# Weblog project
+## Weblog project

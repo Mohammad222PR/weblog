@@ -29,7 +29,13 @@ class Article(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
     is_published = models.BooleanField(default=True)
-    is_private = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.title} -- {self.body} -- {self.image} -- {self.is_published} -- {self.is_private}"
+        return f"{self.title} -- {self.body} -- {self.image} -- {self.is_published}"
+
+    def save(self, *args, **kwargs):
+        if self.title:
+            super(Article, self).save(args, kwargs)
+            Tag.objects.create(title=self.title)
+
+
