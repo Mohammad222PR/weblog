@@ -1,11 +1,12 @@
+<div>
+{% extends 'base.html' %}
+
+{% block contact %}
 {% load static %}
-<!DOCTYPE html>	
-<html lang="en">
-<head>
-	<title>Login V3</title>
-	<meta charset="UTF-8">
+    </div>
+<div style="padding-top: 90px">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-<!--===============================================================================================-->	
+<!--===============================================================================================-->
 	<link rel="icon" type="image/png" href=" {% static 'images/icons/favicon.ico' %} "/>
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href=" {% static 'vendor/bootstrap/css/bootstrap.min.css' %} ">
@@ -15,21 +16,20 @@
 	<link rel="stylesheet" type="text/css" href=" {% static 'fonts/iconic/css/material-design-iconic-font.min.css' %} ">
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href=" {% static 'vendor/animate/animate.css' %} ">
-<!--===============================================================================================-->	
+<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="{% static 'vendor/css-hamburgers/hamburgers.min.css' %} ">
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="{% static 'vendor/animsition/css/animsition.min.css' %} ">
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="{% static 'vendor/select2/select2.min.css' %} ">
-<!--===============================================================================================-->	
+<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="{% static 'vendor/daterangepicker/daterangepicker.css' %} ">
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="{% static 'css/util.css' %} ">
 	<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %} ">
 <!--===============================================================================================-->
-</head>
-<body>
-	
+
+
 	<div class="limiter">
 		<div class="container-login100" style="background-image: url('{% static 'images/bg-01.jpg' %}');">
 			<div class="wrap-login100">
@@ -39,7 +39,7 @@
 						<i class="zmdi zmdi-landscape"></i>
 					</span>
 
-				
+
 					<span class="login100-form-title p-b-34 p-t-27">
 						Register
 					</span>
@@ -69,8 +69,6 @@
 						<span class="focus-input100" data-placeholder="&#xf191;"></span>
 					</div>
 
-					
-
 					<div class="container-login100-form-btn">
 						<button class="login100-form-btn">
 							Register
@@ -86,10 +84,10 @@
 			</div>
 		</div>
 	</div>
-	
+
 
 	<div id="dropDownSelect1"></div>
-	
+
 <!--===============================================================================================-->
 	<script src="{% static "vendor/jquery/jquery-3.2.1.min.js" %}"></script>
 <!--===============================================================================================-->
@@ -105,5 +103,5 @@
 <!--===============================================================================================-->
 	<script src="{% static "js/main.js"%}"></script>
 
-</body>
-</html>
+</div>
+{% endblock %}

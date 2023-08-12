@@ -44,3 +44,5 @@ def Register(request):
 def Logout(request):
     logout(request)
     return redirect('home:home')
+
+
