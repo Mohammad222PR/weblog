@@ -28,6 +28,8 @@ class Article(models.Model):
     image = models.ImageField(upload_to='images/articles')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
+    is_published = models.BooleanField(default=True)
+    is_private = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.title} -- {self.body} -- {self.image}"
+        return f"{self.title} -- {self.body} -- {self.image} -- {self.is_published} -- {self.is_private}"
