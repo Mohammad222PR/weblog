@@ -8,4 +8,3 @@ class HomeView(View):
     def get(self, request):
         articles = Article.objects.filter(is_published=True)
         return render(request, 'home/index.html', {'articles': articles})
-
