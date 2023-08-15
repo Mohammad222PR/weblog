@@ -1,32 +1,23 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block contact %}
-
     <!-- Page Content -->
     <!-- Banner Starts Here -->
-    <div class="main-banner header-text">
-        <div class="container-fluid">
-            <div class="owl-banner owl-carousel">
-                {% for article in articles %}
-                    <div class="item">
-                        <img src="{{ article.image.url }}" alt="">
-                        <div class="item-content">
-                            <div class="main-content">
-                                <div class="meta-category">
-                                    <span>{{ article.category.title }}</span>
-                                </div>
-                                <a href="{% url 'blog:blog_detail' article.slug %}"><h4>{{ article.title }}</h4></a>
-                                <ul class="post-info">
-                                    <li><a href="#">{{ article.author.username }}</a></li>
-                                    <li><a href="#">{{ article.created }}</a></li>
-                                    <li><a href="#">12 Comments</a></li>
-                                </ul>
-                            </div>
+    <div class="heading-page header-text">
+        <section class="page-heading">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="text-content">
+                            <h4>Recent Posts</h4>
+                            <h2>Our Recent Blog Entries</h2>
                         </div>
                     </div>
-                {% endfor %}
+                </div>
             </div>
-        </div>
+        </section>
     </div>
+
     <!-- Banner Ends Here -->
 
     <section class="call-to-action">
@@ -41,7 +32,7 @@
                             </div>
                             <div class="col-lg-4">
                                 <div class="main-button">
-                                    <a rel="nofollow" href="https://templatemo.com/tm-551-stand-blog" target="_parent">Download
+                                    <a href="https://templatemo.com/tm-551-stand-blog" target="_parent">Download
                                         Now!</a>
                                 </div>
                             </div>
@@ -53,14 +44,14 @@
     </section>
 
 
-    <section class="blog-posts">
+    <section class="blog-posts grid-system">
         <div class="container">
             <div class="row">
                 <div class="col-lg-8">
                     <div class="all-blog-posts">
                         <div class="row">
                             {% for article in articles %}
-                                <div class="col-lg-12">
+                                <div class="col-lg-6">
                                     <div class="blog-post">
                                         <div class="blog-thumb">
                                             <img src="{{ article.image.url }}" alt="">
@@ -74,23 +65,17 @@
                                                 <li><a href="#">{{ article.created }}</a></li>
                                                 <li><a href="#">12 Comments</a></li>
                                             </ul>
-                                            <p>{{ article.body|truncatewords:30 }}</p>
+                                            <p>{{ article.body|truncatewords:24 }}</p>
                                             <div class="post-options">
                                                 <div class="row">
-                                                    <div class="col-6">
+                                                    <div class="col-lg-12">
                                                         <ul class="post-tags">
                                                             <li><i class="fa fa-tags"></i></li>
                                                             {% for tag in article.tag.all %}
                                                                 <li><a href="#">{{ tag.title }}</a>,</li>
                                                             {% endfor %}
 
-                                                        </ul>
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <ul class="post-share">
-                                                            <li><i class="fa fa-share-alt"></i></li>
-                                                            <li><a href="#">Facebook</a>,</li>
-                                                            <li><a href="#"> Twitter</a></li>
+
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -101,12 +86,17 @@
 
                             {% endfor %}
                             <div class="col-lg-12">
-                                <div class="main-button">
-                                    <a href="{% url 'blog:blog_list' %}">View All Posts</a></div>
+                                <ul class="page-numbers">
+                                    <li><a href="#">1</a></li>
+                                    <li class="active"><a href="#">2</a></li>
+                                    <li><a href="#">3</a></li>
+                                    <li><a href="#"><i class="fa fa-angle-double-right"></i></a></li>
+                                </ul>
                             </div>
                         </div>
                     </div>
                 </div>
+
                 <div class="col-lg-4">
                     <div class="sidebar">
                         <div class="row">
@@ -125,15 +115,15 @@
                                     </div>
                                     <div class="content">
                                         <ul>
-                                            <li>
-                                                {% for article in articles %}
-                                                    <a href="{% url 'blog:blog_detail' article.slug %}">
-                                                        <h5>{{ article.title }}</h5>
-                                                        <span>{{ article.created }}</span>
-
+                                            {% for resent in resent_article %}
+                                                <li>
+                                                    <a href="{% url 'blog:blog_detail' resent.slug %}">
+                                                        <h5>{{ resent.title }}</h5>
+                                                        <span>{{ resent.created }}</span>
                                                     </a>
-                                                {% endfor %}
-                                            </li>
+                                                </li>
+                                            {% endfor %}
+
 
                                         </ul>
                                     </div>
@@ -150,7 +140,6 @@
                                                 <li><a href="#">- {{ category.title }}</a></li>
                                             {% endfor %}
 
-
                                         </ul>
                                     </div>
                                 </div>
@@ -166,6 +155,7 @@
                                                 <li><a href="#">{{ tag.title }}</a></li>
                                             {% endfor %}
 
+
                                         </ul>
                                     </div>
                                 </div>
@@ -176,5 +166,4 @@
             </div>
         </div>
     </section>
-
 {% endblock %}

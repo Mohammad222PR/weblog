@@ -5,6 +5,7 @@ from django.db import models
 
 class Category(models.Model):
     title = models.CharField(max_length=400)
+    slug = models.SlugField(max_length=100, blank=True, null=True, unique=True)
     created = models.DateField(auto_now_add=True)
 
     def __str__(self):
@@ -13,6 +14,7 @@ class Category(models.Model):
 
 class Tag(models.Model):
     title = models.CharField(max_length=400)
+    slug = models.SlugField(max_length=100, blank=True, null=True, unique=True)
     created = models.DateField(auto_now_add=True)
 
     def __str__(self):
@@ -34,16 +36,21 @@ class Article(models.Model):
     body = models.TextField(max_length=100000)
     image = models.ImageField(upload_to='images/articles')
     created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now_add=True)
+    slug = models.SlugField(max_length=100, blank=True, null=True, unique=True)
+    updated = models.DateTimeField(auto_now=True)
     is_published = models.BooleanField(default=True)
     # custom_manager = ArticleManger()
 
     def __str__(self):
         return f"{self.title} -- {self.body} -- {self.image} -- {self.is_published}"
 
-    def save(self, *args, **kwargs):
-        if self.title:
-            super(Article, self).save(args, kwargs)
-            Tag.objects.create(title=self.title)
+        ###########################################################################################
+        # Save method : if title send database this method run and create new tag from title name.#
+        ###########################################################################################
 
+    # def save(self, *args, **kwargs):
+    #     if self.title:
+    #         super(Article, self).save(args, kwargs)
+    #         Tag.objects.create(title=self.title)
+    #
 

@@ -196,7 +196,7 @@
 
                         <li>
                         {% for article in articles %}
-                            <a href="{% url 'blog:blog_detail' article.id  %}">
+                            <a href="{% url 'blog:blog_detail' article.slug  %}">
                           	<h5>{{ article.title}}</h5>
                           <span>{{ article.created }}</span>
 
