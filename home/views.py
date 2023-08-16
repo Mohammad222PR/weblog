@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.views import View
 from blogs.models import *
 
+
 # Create your views here.
 
 

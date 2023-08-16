@@ -7,11 +7,11 @@ from blogs.models import Article, Category, Tag
 # Create your views here
 
 
-class PostDetail(View):
+class PostDetailView(View):
     def get(self, request, slug):
         article = get_object_or_404(Article, slug=slug)
         categories = Category.objects.all()
-        articles = Article.objects.filter(is_published=True).order_by("-created",)[:5]
+        articles = Article.objects.all().order_by("-updated")[:3]
         return render(request, 'blogs/article_detail.html', {'article':article,'articles':articles, 'categories':categories})
 
 

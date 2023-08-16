@@ -39,6 +39,7 @@ class Article(models.Model):
     slug = models.SlugField(max_length=100, blank=True, null=True, unique=True)
     updated = models.DateTimeField(auto_now=True)
     is_published = models.BooleanField(default=True)
+
     # custom_manager = ArticleManger()
 
     def __str__(self):

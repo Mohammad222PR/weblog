@@ -1,35 +1,17 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="TemplateMo">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&display=swap" rel="stylesheet">
+<head>
 
-    <title>Stand CSS Blog by TemplateMo</title>
+   <title>Stand CSS Blog by TemplateMo</title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-    <link rel="icon" type="image/png" href=" {% static 'images/icons/favicon.ico' %} "/>
+{% include 'inc/head_references.html' %}
 
-    <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="{% static "css/fontawesome.css" %}">
-    <link rel="stylesheet" href="{% static "css/templatemo-stand-blog.css" %}">
-    <link rel="stylesheet" href="{% static "css/owl.css" %}">
-<!--
 
-TemplateMo 551 Stand Blog
-
-https://templatemo.com/tm-551-stand-blog
-
--->
-  </head>
-
-  <body>
+<body>
 
     <!-- ***** Preloader Start ***** -->
     <div id="preloader">
@@ -51,24 +33,26 @@ https://templatemo.com/tm-551-stand-blog
           </button>
           <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
-              <li class="nav-item active">
+            {% with url_name=request.resolver_match.url_name %}
+              <li class="dropdown {% if url_name == 'home' %}active{% endif %}">
                 <a class="nav-link" href="{% url 'home:home' %}">Home
                   <span class="sr-only">(current)</span>
                 </a>
               </li>
 
-              <li class="nav-item">
+              <li class="dropdown {% if url_name == 'about' %}active{% endif %}">
                 <a class="nav-link" href="about.html">About Us</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="blog.html">Blog Entries</a>
+              <li class="dropdown {% if url_name == 'blog_list' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'blog:blog_list' %}">All Blog</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="post-details.html">Post Details</a>
               </li>
-              <li class="nav-item">
+              <li class="dropdown {% if url_name == 'contact' %}active{% endif %}">
                 <a class="nav-link" href="contact.html">Contact Us</a>
               </li>
+            {% endwith %}
               {% if not request.user.is_authenticated %}
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'account:user_login' %}"> Login/Singup</a>

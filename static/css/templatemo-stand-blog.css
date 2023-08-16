@@ -241,6 +241,7 @@ header .navbar {
 .navbar .navbar-nav .show>.nav-link {
 	color: #f48840;
 }
+
 .navbar .navbar-toggler-icon {
 	background-image: none;
 }
