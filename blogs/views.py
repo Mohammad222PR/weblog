@@ -11,7 +11,7 @@ class PostDetailView(View):
     def get(self, request, slug):
         article = get_object_or_404(Article, slug=slug)
         categories = Category.objects.all()
-        articles = Article.objects.all().order_by("-updated")[:3]
+        articles = Article.objects.filter(is_published=True).order_by("-updated")[:3]
         return render(request, 'blogs/article_detail.html', {'article':article,'articles':articles, 'categories':categories})
 
 
