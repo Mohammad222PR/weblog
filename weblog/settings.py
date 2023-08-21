@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-g(ljyu!&tr#7b!^5wjb@f5+lhkjza^80b*vu+l2@s--06nncd(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Install App.
     'django_cleanup.apps.CleanupConfig',
+    'django_render_partial',
+    'django_social_share',
     # App.
     'home.apps.HomeConfig',
     'account.apps.AccountConfig',

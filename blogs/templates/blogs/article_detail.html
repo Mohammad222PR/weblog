@@ -76,13 +76,7 @@
                                                         {% endfor %}
                                                     </ul>
                                                 </div>
-                                                <div class="col-6">
-                                                    <ul class="post-share">
-                                                        <li><i class="fa fa-share-alt"></i></li>
-                                                        <li><a href="#">Facebook</a>,</li>
-                                                        <li><a href="#"> Twitter</a></li>
-                                                    </ul>
-                                                </div>
+                                                {% include 'inc/social_network_link_share.html' %}
                                             </div>
                                         </div>
                                     </div>
@@ -95,6 +89,7 @@
                                     </div>
                                     <div class="content">
                                         <ul>
+
                                             <li>
                                                 <div class="author-thumb">
                                                     <img src="assets/images/comment-author-01.jpg" alt="">

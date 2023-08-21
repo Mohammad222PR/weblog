@@ -12,3 +12,4 @@ class HomeView(View):
         tags = Tag.objects.all()
         categories = Category.objects.all()
         return render(request, 'home/index.html', {'articles': articles, 'tags': tags, 'categories': categories})
+
