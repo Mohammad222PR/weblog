@@ -59,3 +59,15 @@ class Article(models.Model):
     #         super(Article, self).save(args, kwargs)
     #         Tag.objects.create(title=self.title)
     #
+
+
+# Class Comment.
+class Comment(models.Model):
+    articles = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='comments')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, related_name='replies', null=True, blank=True)
+    body = models.TextField(max_length=1000)
+    created_add = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.body

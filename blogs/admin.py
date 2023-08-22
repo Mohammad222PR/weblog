@@ -16,3 +16,7 @@ class CategoryAdmin(admin.ModelAdmin):
 class CustomTagAdmin(admin.ModelAdmin):
     list_display = ('title', 'created')
     prepopulated_fields = {'slug': ('title',)}
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('user','parent','created_add')

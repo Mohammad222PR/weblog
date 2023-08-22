@@ -37,4 +37,4 @@ class tag_detail(View):
     def get(self, request, pk=None):
         tag = get_object_or_404(Tag, id=pk)
         articles = tag.tags.all()
-        return render(request, "blogs/article-list.html", {'articles': articles})
+        return render(request, 'blogs/article-list.html', {'article': articles})

@@ -59,11 +59,11 @@
                 <a class="nav-link" href="{% url 'account:user_login' %}"> Login/Singup</a>
                 {% else %}
                 {% if user.profile.avatar %}
-              <span> <img src="{{user.profile.avatar.url}}" style="border-radius: 30px;" width="30" height="30"   alt="">
+              <span> <img src="{{user.profile.image.url}}" style="border-radius: 30px;" width="30" height="30"   alt="">
 
             </span>
             {% else %}
-            <span> <img src="{% static 'images/images.png' %}" style="border-radius: 30px;" width="30" height="30"   alt="">
+            <span> <img src="{% static 'images/image.png' %}" style="border-radius: 30px;" width="30" height="30" alt="">
 
             </span>
               {% endif %}

@@ -4,21 +4,22 @@ import datetime
 from django.test import TestCase
 from .models import optype, ProductLines, Branche, Productid, Storagepk
 
+
 class ProductLinesTest(TestCase):
     def setUp(self):
         # ایجاد شعبه برای تست
         self.branch = Branche.objects.create(name='شعبه تست')
-        
+
         # ایجاد نوع عملیات برای تست
         self.op_type = optype.objects.create(s='فروش', r='برگشت از فروش', b='خرید', p='برگشت از خرید',
                                              m='موجودی ابتدای دوره', f='اضافات', d='کسورات', t='انتقالات انبار')
-        
+
         # ایجاد کالای مرتبط برای تست
         self.product_id = Productid.objects.create(name='کالای تست', code='KT01')
-        
+
         # ایجاد انبار مرتبط برای تست
         self.storage_pk = Storagepk.objects.create(number='انبار تست')
-        
+
         # ایجاد عملیات برای تست
         self.product_line = ProductLines.objects.create(
             branch=self.branch,
@@ -38,7 +39,7 @@ class ProductLinesTest(TestCase):
             tru_price=900,
             total_amount=850,
         )
-    
+
     def test_product_line_creation(self):
         # تست بررسی ایجاد عملیات به درستی
         product_line = ProductLines.objects.get(op_num=1)

@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block contact %}
 
     <!-- Page Content -->
@@ -90,51 +91,45 @@
                                     <div class="content">
                                         <ul>
 
-                                            <li>
-                                                <div class="author-thumb">
-                                                    <img src="assets/images/comment-author-01.jpg" alt="">
-                                                </div>
-                                                <div class="right-content">
-                                                    <h4>Charles Kate<span>May 16, 2020</span></h4>
-                                                    <p>Fusce ornare mollis eros. Duis et diam vitae justo fringilla
-                                                        condimentum eu quis leo. Vestibulum id turpis porttitor sapien
-                                                        facilisis scelerisque. Curabitur a nisl eu lacus convallis
-                                                        eleifend posuere id tellus.</p>
-                                                </div>
-                                            </li>
-                                            <li class="replied">
-                                                <div class="author-thumb">
-                                                    <img src="assets/images/comment-author-02.jpg" alt="">
-                                                </div>
-                                                <div class="right-content">
-                                                    <h4>Thirteen Man<span>May 20, 2020</span></h4>
-                                                    <p>In porta urna sed venenatis sollicitudin. Praesent urna sem,
-                                                        pulvinar vel mattis eget.</p>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="author-thumb">
-                                                    <img src="assets/images/comment-author-03.jpg" alt="">
-                                                </div>
-                                                <div class="right-content">
-                                                    <h4>Belisimo Mama<span>May 16, 2020</span></h4>
-                                                    <p>Nullam nec pharetra nibh. Cras tortor nulla, faucibus id
-                                                        tincidunt in, ultrices eget ligula. Sed vitae suscipit ligula.
-                                                        Vestibulum id turpis volutpat, lobortis turpis ac, molestie
-                                                        nibh.</p>
-                                                </div>
-                                            </li>
-                                            <li class="replied">
-                                                <div class="author-thumb">
-                                                    <img src="assets/images/comment-author-02.jpg" alt="">
-                                                </div>
-                                                <div class="right-content">
-                                                    <h4>Thirteen Man<span>May 22, 2020</span></h4>
-                                                    <p>Mauris sit amet justo vulputate, cursus massa congue, vestibulum
-                                                        odio. Aenean elit nunc, gravida in erat sit amet, feugiat
-                                                        viverra leo.</p>
-                                                </div>
-                                            </li>
+                                            {% for comment in article.comments.all %}
+                                                {% if  comment.parent == None %}
+                                                    <li>
+                                                        <div class="author-thumb">
+                                                            {% if comment.user.profile.image %}
+                                                                <img src="{{ comment.user.profile.image.url }}"
+                                                                     alt="">
+                                                            {% else %}
+                                                                <img src="{% static 'images/image.png' %}" alt="">
+                                                            {% endif %}
+                                                        </div>
+                                                        <div class="right-content">
+                                                            <h4>{{ comment.user }}<span>{{ comment.created_add }}</span>
+                                                            </h4>
+                                                            <p>{{ comment.body }}</p>
+                                                        </div>
+                                                    </li>
+                                                    {% for reply in comment.replies.all %}
+                                                        <li class="replied">
+                                                            <div class="author-thumb">
+                                                                {% if comment.user.profile.image %}
+                                                                    <img src="{{ comment.user.profile.image.url }}"
+                                                                         alt="">
+                                                                {% else %}
+                                                                    <img src="{% static 'images/image.png' %}" alt="">
+                                                                {% endif %}
+
+                                                            </div>
+                                                            <div class="right-content">
+                                                                <h4>{{ reply.user }}<span>{{ reply.created_add }}</span>
+                                                                </h4>
+                                                                <p>{{ reply.body }}</p>
+                                                            </div>
+                                                        </li>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            {% endfor %}
+
+
                                         </ul>
                                     </div>
                                 </div>
