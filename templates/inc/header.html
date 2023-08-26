@@ -6,76 +6,80 @@
 
 <head>
 
-   <title>Stand CSS Blog by TemplateMo</title>
+    <title>Stand CSS Blog by TemplateMo</title>
 
-{% include 'inc/head_references.html' %}
+    {% include 'inc/head_references.html' %}
 
 
 <body>
 
-    <!-- ***** Preloader Start ***** -->
-    <div id="preloader">
-        <div class="jumper">
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
-
+<!-- ***** Preloader Start ***** -->
+<div id="preloader">
+    <div class="jumper">
+        <div></div>
+        <div></div>
+        <div></div>
     </div>
-    <!-- ***** Preloader End ***** -->
 
-    <!-- Header -->
-    <header class="">
-      <nav class="navbar navbar-expand-lg">
+</div>
+<!-- ***** Preloader End ***** -->
+
+<!-- Header -->
+<header class="">
+    <nav class="navbar navbar-expand-lg">
         <div class="container">
-          <a class="navbar-brand" href="index.html"><h2>Stand Blog<em>.</em></h2></a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
-            {% with url_name=request.resolver_match.url_name %}
-              <li class="dropdown {% if url_name == 'home' %}active{% endif %}">
-                <a class="nav-link" href="{% url 'home:home' %}">Home
-                  <span class="sr-only">(current)</span>
-                </a>
-              </li>
+            <a class="navbar-brand" href="index.html"><h2>Stand Blog<em>.</em></h2></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                    aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    {% with url_name=request.resolver_match.url_name %}
+                        <li class="dropdown {% if url_name == 'home' %}active{% endif %}">
+                            <a class="nav-link" href="{% url 'home:home' %}">Home
+                                <span class="sr-only">(current)</span>
+                            </a>
+                        </li>
 
-              <li class="dropdown {% if url_name == 'about' %}active{% endif %}">
-                <a class="nav-link" href="about.html">About Us</a>
-              </li>
-              <li class="dropdown {% if url_name == 'blog_list' %}active{% endif %}">
-                <a class="nav-link" href="{% url 'blog:blog_list' %}">All Blog</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="post-details.html">Post Details</a>
-              </li>
-              <li class="dropdown {% if url_name == 'contact' %}active{% endif %}">
-                <a class="nav-link" href="contact.html">Contact Us</a>
-              </li>
-            {% endwith %}
-              {% if not request.user.is_authenticated %}
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'account:user_login' %}"> Login/Singup</a>
-                {% else %}
-                {% if user.profile.avatar %}
-              <span> <img src="{{user.profile.image.url}}" style="border-radius: 30px;" width="30" height="30"   alt="">
-
-            </span>
-            {% else %}
-            <span> <img src="{% static 'images/image.png' %}" style="border-radius: 30px;" width="30" height="30" alt="">
+                        <li class="dropdown {% if url_name == 'about' %}active{% endif %}">
+                            <a class="nav-link" href="about.html">About Us</a>
+                        </li>
+                        <li class="dropdown {% if url_name == 'blog_list' %}active{% endif %}">
+                            <a class="nav-link" href="{% url 'blog:blog_list' %}">All Blog</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="post-details.html">Post Details</a>
+                        </li>
+                        <li class="dropdown {% if url_name == 'contact' %}active{% endif %}">
+                            <a class="nav-link" href="{% url 'blog:contact' %}">Contact Us</a>
+                        </li>
+                    {% endwith %}
+                    {% if not request.user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'account:user_login' %}"> Login/Singup</a>
+                            {% else %}
+                            {% if user.profile.avatar %}
+                                <span> <img src="{{ user.profile.image.url }}" style="border-radius: 30px;" width="30"
+                                            height="30" alt="">
 
             </span>
-              {% endif %}
+                            {% else %}
+                                <span> <img src="{% static 'images/image.png' %}" style="border-radius: 30px;"
+                                            width="30" height="30" alt="">
 
-            <a class="nav-link" href="contact.html" data-placeholder="&#xf207;">{{request.user.username}}</a>
-                <a class="nav-link" href="{% url 'account:user_logout' %}" >logout</a>
+            </span>
+                            {% endif %}
+
+                            <a class="nav-link" href="contact.html"
+                               data-placeholder="&#xf207;">{{ request.user.username }}</a>
+                            <a class="nav-link" href="{% url 'account:user_logout' %}">logout</a>
 
 
-              </li>
-              {% endif %}
-            </ul>
-          </div>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
-      </nav>
-    </header>
+    </nav>
+</header>

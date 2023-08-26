@@ -46,7 +46,7 @@ class Article(models.Model):
     # custom_manager = ArticleManger()
 
     def __str__(self):
-        return f"{self.title} -- {self.body} -- {self.image} -- {self.is_published}"
+        return self.title
 
         ###########################################################################################
         # Save method : if title send database this method run and create new tag from title name.#
@@ -71,3 +71,14 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.body
+
+# Contact Form.
+class Contact(models.Model):
+    name = models.CharField(max_length=1000)
+    email = models.EmailField(max_length=1000)
+    subject = models.CharField(max_length=1000)
+    message = models.TextField(max_length=1000000)
+    created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+
+    def __str__(self):
+        return self.name

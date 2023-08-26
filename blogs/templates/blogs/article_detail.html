@@ -65,9 +65,7 @@
                                         </ul>
                                         <p>{{ article.body }}</p>
 
-
                                         <div class="post-options">
-
                                             <div class="row">
                                                 <div class="col-6">
                                                     <ul class="post-tags">
@@ -83,14 +81,14 @@
                                     </div>
                                 </div>
                             </div>
+                            {% include 'inc/messages.html' %}
                             <div class="col-lg-12">
                                 <div class="sidebar-item comments">
                                     <div class="sidebar-heading">
-                                        <h2>4 comments</h2>
+                                        <h2>{{ comment }} comments</h2>
                                     </div>
                                     <div class="content">
                                         <ul>
-
                                             {% for comment in article.comments.all %}
                                                 {% if  comment.parent == None %}
                                                     <li>
@@ -104,10 +102,25 @@
                                                         </div>
                                                         <div class="right-content">
                                                             <h4>{{ comment.user }}<span>{{ comment.created_add }}</span>
+                                                                {% if comment.user.id == user.id %}
+                                                                <a id="delete" onclick="delete_comment()" href="{% url 'blog:comment_delete' comment.id article.slug %}" style="color: red">X</a>
+                                                                {% endif %}
+                                                                <button onclick="set_value({{ comment.id }})"
+                                                                        class="btn btn-outline-warning">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" height="1em"
+                                                                         viewBox="0 0 512 512">
+
+
+
+                                                                    <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                                                                        <path d="M8.309 189.836L184.313 37.851C199.719 24.546 224 35.347 224 56.015v80.053c160.629 1.839 288 34.032 288 186.258 0 61.441-39.581 122.309-83.333 154.132-13.653 9.931-33.111-2.533-28.077-18.631 45.344-145.012-21.507-183.51-176.59-185.742V360c0 20.7-24.3 31.453-39.687 18.164l-176.004-152c-11.071-9.562-11.086-26.753 0-36.328z"/>
+                                                                    </svg>
+                                                                </button>
                                                             </h4>
                                                             <p>{{ comment.body }}</p>
                                                         </div>
                                                     </li>
+                                                    <br>
                                                     {% for reply in comment.replies.all %}
                                                         <li class="replied">
                                                             <div class="author-thumb">
@@ -117,10 +130,10 @@
                                                                 {% else %}
                                                                     <img src="{% static 'images/image.png' %}" alt="">
                                                                 {% endif %}
-
                                                             </div>
                                                             <div class="right-content">
                                                                 <h4>{{ reply.user }}<span>{{ reply.created_add }}</span>
+
                                                                 </h4>
                                                                 <p>{{ reply.body }}</p>
                                                             </div>
@@ -128,57 +141,58 @@
                                                     {% endfor %}
                                                 {% endif %}
                                             {% endfor %}
-
-
                                         </ul>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-12">
-                                <div class="sidebar-item submit-comment">
-                                    <div class="sidebar-heading">
-                                        <h2>Your comment</h2>
-                                    </div>
-                                    <div class="content">
-                                        <form id="comment" action="#" method="post">
-                                            <div class="row">
-                                                <div class="col-md-6 col-sm-12">
-                                                    <fieldset>
-                                                        <input name="name" type="text" id="name" placeholder="Your name"
-                                                               required="">
-                                                    </fieldset>
-                                                </div>
-                                                <div class="col-md-6 col-sm-12">
-                                                    <fieldset>
-                                                        <input name="email" type="text" id="email"
-                                                               placeholder="Your email" required="">
-                                                    </fieldset>
-                                                </div>
-                                                <div class="col-md-12 col-sm-12">
-                                                    <fieldset>
-                                                        <input name="subject" type="text" id="subject"
-                                                               placeholder="Subject">
-                                                    </fieldset>
-                                                </div>
-                                                <div class="col-lg-12">
-                                                    <fieldset>
-                                                        <textarea name="message" rows="6" id="message"
+                            {% if request.user.is_authenticated %}
+                                <div id="hi" class="col-lg-12">
+                                    <div class="sidebar-item submit-comment">
+                                        <div class="sidebar-heading">
+                                            <h2>Your comment</h2>
+                                        </div>
+                                        <div class="content">
+                                            <form id="comment" action="" method="post">
+                                                {% csrf_token %}
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <input type="hidden" id="parent_id" name="parent_id" value="">
+                                                        <fieldset>
+                                                        <textarea name="body" rows="6" id="message"
                                                                   placeholder="Type your comment"
                                                                   required=""></textarea>
-                                                    </fieldset>
+                                                        </fieldset>
+                                                    </div>
+                                                    <div class="col-lg-12">
+                                                        <fieldset>
+                                                            <button type="submit" id="form-submit" class="main-button">
+                                                                Submit
+                                                            </button>
+                                                        </fieldset>
+                                                    </div>
                                                 </div>
-                                                <div class="col-lg-12">
-                                                    <fieldset>
-                                                        <button type="submit" id="form-submit" class="main-button">
-                                                            Submit
-                                                        </button>
-                                                    </fieldset>
-                                                </div>
-                                            </div>
-                                        </form>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            {% else %}
+                                <div class="col-lg-12">
+                                    <div class="sidebar-item submit-comment">
+                                        <div class="sidebar-heading">
+                                            <h2>Your comment</h2>
+                                        </div>
+
+                                        <div class="content">
+                                            <p class="alert alert-danger">If you wana post commnt first<a
+                                                    style="color: #000000"
+                                                    href="{% url 'account:user_login' %}"> login </a> / <a
+                                                    style="color: #000000"
+                                                    href="{% url 'account:user_register' %}"> Register </a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -187,5 +201,19 @@
         </div>
     </section>
 
+    <script>
+        function set_value(id) {
+            document.getElementById('parent_id').value = id;
+            document.getElementById('message').placeholder = 'Type your reply';
+            window.location.href = '#hi';
+
+        }
+
+        function delete_comment(){
+            alert('are you sure wana delete this comment?');
+
+
+        }
+</script>
 
 {% endblock %}

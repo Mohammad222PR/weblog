@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 
+
 # Create your views here.
 
 
@@ -44,4 +45,3 @@ def Register(request):
 def Logout(request):
     logout(request)
     return redirect('home:home')
-

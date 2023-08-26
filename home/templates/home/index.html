@@ -82,7 +82,9 @@
                                                         <ul class="post-tags">
                                                             <li><i class="fa fa-tags"></i></li>
                                                             {% for tag in article.tag.all %}
-                                                                <li><a href="{% url 'blog:tag_list' tag.id %}">{{ tag.title }}</a>,</li>
+                                                                <li>
+                                                                    <a href="{% url 'blog:tag_list' tag.id %}">{{ tag.title }}</a>,
+                                                                </li>
                                                             {% endfor %}
 
                                                         </ul>
