@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 
+from account.forms import LoginForm
+
 
 # Create your views here.
 
@@ -10,13 +12,13 @@ def Login(request):
     if request.user.is_authenticated:
         return redirect('home:home')
     if request.method == "POST":
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('home:home')
-
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            user = authenticate(request, username=cd['username'], password=cd['password'])
+            if user is not None:
+                login(request, user)
+                return redirect('home:home')
     return render(request, 'account/login.html')
 
 
