@@ -22,7 +22,6 @@ def Login(request):
     return render(request, 'account/login.html')
 
 
-
 def Register(request):
     context = {"errors": []}
     if request.user.is_authenticated:
