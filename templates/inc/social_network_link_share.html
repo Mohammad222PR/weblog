@@ -1,0 +1,15 @@
+{% load social_share %}
+
+<div class="col-6">
+    <ul class="post-share">
+        <li><i class="fa fa-share-alt"></i></li>
+        <li>{% post_to_linkedin article.get_absolute_url "Share" %}</li>
+        |
+        <li>{% post_to_facebook article.get_absolute_url "Share Facebook" %}</li>
+        |
+        <li>{% post_to_whatsapp article.get_absolute_url "Share Whats app" %}</li>
+        |
+        <li>{% post_to_telegram article.get_absolute_url "Share Telegram" %}</li>
+
+    </ul>
+</div>
