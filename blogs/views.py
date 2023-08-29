@@ -1,10 +1,9 @@
-
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.core.paginator import Paginator
 from django.contrib import messages
 from blogs.forms import ContactForm, CommentForm
-from blogs.models import Article, Category, Tag, Comment
+from blogs.models import Article, Category, Tag, Comment, Contact
 
 
 # Create your views here
@@ -12,6 +11,7 @@ from blogs.models import Article, Category, Tag, Comment
 
 class PostDetailView(View):
     form_class = CommentForm
+
     def get(self, request, slug):
         article = get_object_or_404(Article, slug=slug)
         categories = Category.objects.all()
@@ -27,7 +27,6 @@ class PostDetailView(View):
         comment.save()
         messages.success(request, 'Youre comment is added successfully', 'success')
         return redirect('blog:blog_detail', article.slug)
-
 
 
 class DeleteCommentView(View):
@@ -86,13 +85,16 @@ class SearchView(View):
 # View for Contacts.
 class ContactsView(View):
     form_class = ContactForm
+
     def get(self, request):
         return render(request, 'blogs/contact.html')
 
     def post(self, request):
         form = self.form_class(request.POST)
         if form.is_valid():
-            form.save()
+            new = form.save(commit=False)
+            new.user = request.user
+            new.save()
             messages.success(request, 'Youre contact is sucess', 'success')
             return redirect('blog:contact')
         return render(request, 'blogs/contact.html')

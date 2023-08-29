@@ -72,10 +72,13 @@ class Comment(models.Model):
     def __str__(self):
         return self.body
 
+
 # Contact Form.
 class Contact(models.Model):
+    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
     name = models.CharField(max_length=1000)
     email = models.EmailField(max_length=1000)
+    number = models.IntegerField(max_length=11, verbose_name='Enter your number', null=True, blank=True)
     subject = models.CharField(max_length=1000)
     message = models.TextField(max_length=1000000)
     created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
