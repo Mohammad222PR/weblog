@@ -19,11 +19,12 @@ def Login(request):
             if user is not None:
                 login(request, user)
                 return redirect('home:home')
-    return render(request, 'account/login.html')
+    else:
+        form = LoginForm()
+    return render(request, 'account/login.html', {'form': form})
 
 
 def Register(request):
-    context = {"errors": []}
     if request.user.is_authenticated:
         return redirect('home:home')
     if request.method == "POST":
@@ -34,7 +35,9 @@ def Register(request):
             user = authenticate(request, username=cd['username'], password=cd['password1'])
             login(request, user)
             return redirect('home:home')
-    return render(request, 'account/register.html', {})
+    else:
+        form = SingupForm()
+    return render(request, 'account/register.html', {'form': form})
 
 
 def Logout(request):

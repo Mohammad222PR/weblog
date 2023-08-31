@@ -1,6 +1,7 @@
 from django import forms
+from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
-from django.core.validators import ValidationError
+from django.forms import ValidationError
 
 
 class SingupForm(forms.Form):
@@ -20,7 +21,7 @@ class SingupForm(forms.Form):
         email = self.cleaned_data.get('email')
         user = User.objects.filter(email=email).exists()
         if user:
-            raise ValidationError('Username already exists!')
+            raise ValidationError('Email already exists!')
         return email
 
     def clean(self):
@@ -34,3 +35,9 @@ class SingupForm(forms.Form):
 class LoginForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput())
     password = forms.CharField(max_length=100, widget=forms.PasswordInput())
+
+    def clean_password(self):
+        user = authenticate(username=self.cleaned_data.get('username'), password=self.cleaned_data.get('password'))
+        if user is not None:
+            return self.cleaned_data.get('password')
+        raise ValidationError("username or password is not same", code="invalid_error")
