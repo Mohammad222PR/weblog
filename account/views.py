@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 
-from account.forms import LoginForm, SingupForm
+from account.forms import LoginForm, SingupForm, EditAccountForm
 
 
 # Create your views here.
@@ -43,3 +43,18 @@ def Register(request):
 def Logout(request):
     logout(request)
     return redirect('home:home')
+
+
+def EditAccountView(request):
+    if request.user.is_authenticated:
+        return redirect('home:home')
+    user = request.user
+    form = EditAccountForm(instance=user)
+    if request.method == 'POST':
+        form = EditAccountForm(instance=user, data=request.POST)
+        if form.is_valid():
+            edit = form.save()
+            edit.user = request.user
+            edit.save()
+            return redirect('account:edit_account')
+    return render(request, 'account/edit_account.html', {'form': form})

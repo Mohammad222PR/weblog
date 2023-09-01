@@ -29,6 +29,7 @@ class PostDetailView(View):
         return redirect('blog:blog_detail', article.slug)
 
 
+
 class DeleteCommentView(View):
     def get(self, request, pk, slug):
         article = get_object_or_404(Article, slug=slug)

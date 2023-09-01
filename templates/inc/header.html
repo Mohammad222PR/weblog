@@ -71,7 +71,7 @@
             </span>
                             {% endif %}
 
-                            <a class="nav-link" href="contact.html"
+                            <a class="nav-link" href="{% url 'account:edit_account' %}"
                                data-placeholder="&#xf207;">{{ request.user.username }}</a>
                             <a class="nav-link" href="{% url 'account:user_logout' %}">logout</a>
 

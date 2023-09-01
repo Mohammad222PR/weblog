@@ -41,3 +41,9 @@ class LoginForm(forms.Form):
         if user is not None:
             return self.cleaned_data.get('password')
         raise ValidationError("username or password is not same", code="invalid_error")
+
+
+class EditAccountForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'first_name','last_name',)
