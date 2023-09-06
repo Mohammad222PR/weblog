@@ -1,7 +1,11 @@
+from django.contrib.auth.models import User
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.core.paginator import Paginator
 from django.contrib import messages
+from django.views.generic import ListView, FormView, CreateView
+from django.urls import reverse, reverse_lazy
+
 from blogs.forms import ContactForm, CommentForm
 from blogs.models import Article, Category, Tag, Comment, Contact
 
@@ -29,7 +33,6 @@ class PostDetailView(View):
         return redirect('blog:blog_detail', article.slug)
 
 
-
 class DeleteCommentView(View):
     def get(self, request, pk, slug):
         article = get_object_or_404(Article, slug=slug)
@@ -39,15 +42,22 @@ class DeleteCommentView(View):
             messages.success(request, 'Youre comment is delete', 'warning')
             return redirect('blog:blog_detail', article.slug)
 
+#
+# class PostListView(View):
+#     def get(self, request):
+#         articles = Article.objects.filter(is_published=True)
+#         page_number = request.GET.get('page')
+#         paginator = Paginator(articles, 1)
+#         objects_list = paginator.get_page(page_number)
+#
+#         return render(request, 'blogs/article_list.html', {'articles': objects_list})
 
-class PostListView(View):
-    def get(self, request):
-        articles = Article.objects.filter(is_published=True)
-        page_number = request.GET.get('page')
-        paginator = Paginator(articles, 1)
-        objects_list = paginator.get_page(page_number)
 
-        return render(request, 'blogs/article-list.html', {'articles': objects_list})
+class PostListView(ListView):
+    model = Article
+    paginate_by = 1
+    context_object_name = 'articles'
+    queryset = Article.objects.filter(is_published=True)
 
 
 class category_detail(View):
@@ -58,7 +68,7 @@ class category_detail(View):
         paginator = Paginator(articles, 1)
         objects_list = paginator.get_page(page_number)
 
-        return render(request, "blogs/article-list.html", {'articles': objects_list, 'category': category})
+        return render(request, "blogs/article_list.html", {'articles': objects_list, 'category': category})
 
 
 class tag_detail(View):
@@ -69,7 +79,7 @@ class tag_detail(View):
         paginator = Paginator(articles, 1)
         objects_list = paginator.get_page(page_number)
 
-        return render(request, 'blogs/article-list.html', {'articles': objects_list, 'tag': tag})
+        return render(request, 'blogs/article_list.html', {'articles': objects_list, 'tag': tag})
 
 
 class SearchView(View):
@@ -80,22 +90,34 @@ class SearchView(View):
         paginator = Paginator(articles, 1)
         objects_list = paginator.get_page(page_number)
 
-        return render(request, 'blogs/article-list.html', {'articles': objects_list, 'q': q})
+        return render(request, 'blogs/article_list.html', {'articles': objects_list, 'q': q})
 
 
-# View for Contacts.
-class ContactsView(View):
-    form_class = ContactForm
+# class ContactsView(View):
+#     form_class = ContactForm
+#
+#     def get(self, request):
+#         return render(request, 'blogs/contact.html')
+#
+#     def post(self, request):
+#         form = self.form_class(request.POST)
+#         if form.is_valid():
+#             new = form.save(commit=False)
+#             new.user = request.user
+#             new.save()
+#             messages.success(request, 'Youre contact is sucess', 'success')
+#             return redirect('blog:contact')
+#         return render(request, 'blogs/contact.html')
+#
 
-    def get(self, request):
-        return render(request, 'blogs/contact.html')
+class ContactsView(CreateView):
+    template_name = 'blogs/contact.html'
+    model = Contact
+    fields = "__all__"
+    success_url = reverse_lazy('blog:contact')
 
-    def post(self, request):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            new = form.save(commit=False)
-            new.user = request.user
-            new.save()
-            messages.success(request, 'Youre contact is sucess', 'success')
-            return redirect('blog:contact')
-        return render(request, 'blogs/contact.html')
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        instance.user = self.request.user
+        instance.save()
+        return super().form_valid(form)

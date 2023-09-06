@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ExtraIconsSettingsProject">
+    <option name="overrideIDESettings" value="true" />
+    <option name="addToIDEUserIcons" value="false" />
+    <option name="ignoredPattern" value="" />
+    <option name="additionalUIScale" value="1.0" />
+    <option name="uiTypeIconsPreference" value="BASED_ON_ACTIVE_UI_TYPE" />
+    <option name="useIDEFilenameIndex" value="false" />
+  </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.11 (weblog_2)" project-jdk-type="Python SDK" />
   <component name="PyCharmProfessionalAdvertiser">
     <option name="shown" value="true" />

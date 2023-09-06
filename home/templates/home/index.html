@@ -71,9 +71,9 @@
                                             <a href="{% url 'blog:blog_detail' article.slug %}">
                                                 <h4>{{ article.title }}</h4></a>
                                             <ul class="post-info">
-                                                <li><a href="#">{{ article.author }}</a></li>
-                                                <li><a href="#">{{ article.created }}</a></li>
-                                                <li><a href="#">{{ article.comments.count }} Comments</a></li>
+                                                <li><a href="{% url 'blog:blog_detail' article.slug %}">{{ article.author }}</a></li>
+                                                <li><a href="{% url 'blog:blog_detail' article.slug %}">{{ article.created }}</a></li>
+                                                <li><a href="{% url 'blog:blog_detail' article.slug %}">{{ article.comments.count }} Comments</a></li>
                                             </ul>
                                             <p>{{ article.body|truncatewords:30 }}</p>
                                             <div class="post-options">
