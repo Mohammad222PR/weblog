@@ -85,3 +85,10 @@ class Contact(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Like(models.Model):
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='likes')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='likes')
+
+

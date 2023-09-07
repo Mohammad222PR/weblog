@@ -57,7 +57,7 @@
                                     </div>
                                     <div class="down-content">
                                         <span>{{ article.category }}</span>
-                                        <a href="post-details.html"><h4>{{ article.title}}</h4></a>
+                                        <a href="post-details.html"><h4>{{ article.title }}</h4></a>
                                         <ul class="post-info">
                                             <li><a href="#">{{ article.author }}</a></li>
                                             <li><a href="#">{{ article.created }}</a></li>
@@ -69,9 +69,29 @@
                                             <div class="row">
                                                 <div class="col-6">
                                                     <ul class="post-tags">
+                                                        {% if  is_likes %}
+                                                            <li>
+
+                                                            <a id="like"
+                                                               onclick="like('{{ article.slug }}','{{ article.id }}' )"
+                                                               style="font-size: 20px" class="fa fa-heart"></a>
+                                                            <span id="count">{{ article.likes.all.count }}</span>
+                                                            <li>
+                                                        {% else %}
+                                                            <li>
+                                                            <a id="like"
+                                                               onclick="like('{{ article.slug }}','{{ article.id }}')"
+                                                               style="font-size: 20px" class="fa fa-heart-o"></a>
+                                                            <span id="count">{{ article.likes.all.count }}</span>
+                                                            </li>
+                                                        {% endif %}
+                                                        </li>
+                                                        <br>
                                                         <li><i class="fa fa-tags"></i></li>
                                                         {% for tag in article.tag.all %}
-                                                            <li><a href="#">{{ tag.title }}</a>,</li>
+                                                            <li>
+                                                                <a href="{% url 'blog:tag_list' tag.id %}">{{ tag.title }}</a>,
+                                                            </li>
                                                         {% endfor %}
                                                     </ul>
                                                 </div>
@@ -212,6 +232,22 @@
         function delete_comment() {
             alert('are you sure wana delete this comment?');
 
+        }
+
+        function like(slug, id) {
+            var element = document.getElementById("like")
+            var count = document.getElementById("count")
+            $.get(`/articles/like/${slug}/${id}`).then(response => {
+                if (response['response'] === "like") {
+                    element.className = 'fa fa-heart'
+                    count.innerText = Number(count.innerText) + 1
+                } else {
+                    element.className = 'fa fa-heart-o'
+                    count.innerText = Number(count.innerText) - 1
+
+                }
+
+            })
         }
     </script>
 

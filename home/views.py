@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views import View
 from blogs.models import *
+from blogs.views import PostDetailView
 
 
 # Create your views here.

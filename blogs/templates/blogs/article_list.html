@@ -51,6 +51,7 @@
                 <div class="col-lg-8">
                     <div class="all-blog-posts">
                         <div class="row">
+
                             {% for article in articles %}
                                 <div class="col-lg-6">
                                     <div class="blog-post">
@@ -62,9 +63,15 @@
                                             <a href="{% url 'blog:blog_detail' article.slug %}">
                                                 <h4>{{ article.title }}</h4></a>
                                             <ul class="post-info">
-                                                <li><a href="{% url 'blog:blog_detail' article.slug %}">{{ article.author }}</a></li>
-                                                <li><a href="{% url 'blog:blog_detail' article.slug %}">{{ article.created }}</a></li>
-                                                <li><a href="{% url 'blog:blog_detail' article.slug %}">{{ article.comments.all.count }} Comments</a></li>
+                                                <li>
+                                                    <a href="{% url 'blog:blog_detail' article.slug %}">{{ article.author }}</a>
+                                                </li>
+                                                <li>
+                                                    <a href="{% url 'blog:blog_detail' article.slug %}">{{ article.created }}</a>
+                                                </li>
+                                                <li>
+                                                    <a href="{% url 'blog:blog_detail' article.slug %}">{{ article.comments.all.count }}
+                                                        Comments</a></li>
                                             </ul>
                                             <p>{{ article.body|truncatewords:24 }}</p>
                                             <div class="post-options">
@@ -93,22 +100,28 @@
                                 {% if page_obj.has_other_pages %}
                                     <ul class="page-numbers">
                                         {% if page_obj.has_previous %}
-                                            <li><a href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"><i
+                                            <li><a href="?page=
+                                                    {{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"><i
                                                     class="fa fa-angle-double-left"></i></a></li>
                                         {% endif %}
 
                                         {% for i in page_obj.paginator.page_range %}
 
                                             {% if page_obj.number == i %}
-                                                <li class="active"><a href="?page={{ i }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{ i }}</a></li>
+                                                <li class="active"><a href="?page=
+                                                        {{ i }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{ i }}</a>
+                                                </li>
                                             {% else %}
-                                                <li><a href="?page={{ i }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{ i }}</a></li>
+                                                <li><a href="?page=
+                                                        {{ i }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{ i }}</a>
+                                                </li>
                                             {% endif %}
 
                                         {% endfor %}
 
                                         {% if page_obj.has_next %}
-                                            <li><a href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"><i
+                                            <li><a href="?page=
+                                                    {{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"><i
                                                     class="fa fa-angle-double-right"></i></a></li>
                                         {% endif %}
                                     </ul>

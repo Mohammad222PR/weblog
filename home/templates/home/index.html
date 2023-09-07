@@ -15,11 +15,18 @@
                                 <div class="meta-category">
                                     <span>{{ article.category.title }}</span>
                                 </div>
+
                                 <a href="{% url 'blog:blog_detail' article.slug %}"><h4>{{ article.title }}</h4></a>
                                 <ul class="post-info">
                                     <li><a href="#">{{ article.author.username }}</a></li>
                                     <li><a href="#">{{ article.created }}</a></li>
                                     <li><a href="#">{{ article.comments.count }} Comments</a></li>
+                                    <div class="col-6">
+                                        <ul class="post-tags">
+                                            <li><i class="fa fa-heart-o"></i></li>
+
+                                        </ul>
+                                    </div>
                                 </ul>
                             </div>
                         </div>
@@ -71,9 +78,15 @@
                                             <a href="{% url 'blog:blog_detail' article.slug %}">
                                                 <h4>{{ article.title }}</h4></a>
                                             <ul class="post-info">
-                                                <li><a href="{% url 'blog:blog_detail' article.slug %}">{{ article.author }}</a></li>
-                                                <li><a href="{% url 'blog:blog_detail' article.slug %}">{{ article.created }}</a></li>
-                                                <li><a href="{% url 'blog:blog_detail' article.slug %}">{{ article.comments.count }} Comments</a></li>
+                                                <li>
+                                                    <a href="{% url 'blog:blog_detail' article.slug %}">{{ article.author }}</a>
+                                                </li>
+                                                <li>
+                                                    <a href="{% url 'blog:blog_detail' article.slug %}">{{ article.created }}</a>
+                                                </li>
+                                                <li>
+                                                    <a href="{% url 'blog:blog_detail' article.slug %}">{{ article.comments.count }}
+                                                        Comments</a></li>
                                             </ul>
                                             <p>{{ article.body|truncatewords:30 }}</p>
                                             <div class="post-options">
@@ -86,8 +99,8 @@
                                                                     <a href="{% url 'blog:tag_list' tag.id %}">{{ tag.title }}</a>,
                                                                 </li>
                                                             {% endfor %}
-
                                                         </ul>
+
                                                     </div>
                                                     {% include 'inc/social_network_link_share.html' %}
                                                 </div>

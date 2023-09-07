@@ -28,8 +28,14 @@ class CommentAdmin(admin.ModelAdmin):
     search_fields = ('article', 'user', 'parent', 'body', 'created_add')
     list_filter = ('created_add',)
 
+
 @admin.register(Contact)
 class ContactAdmin(admin.ModelAdmin):
-    list_display = ('user','name', 'email', 'subject', 'message', 'created')
+    list_display = ('user', 'name', 'email', 'subject', 'message', 'created')
     search_fields = ('name', 'email', 'subject', 'message', 'created')
     list_filter = ('created',)
+
+
+@admin.register(Like)
+class LikeAdmin(admin.ModelAdmin):
+    list_display = ('article', 'user')

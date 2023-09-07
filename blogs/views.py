@@ -1,27 +1,48 @@
 from django.contrib.auth.models import User
+from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.core.paginator import Paginator
 from django.contrib import messages
-from django.views.generic import ListView, FormView, CreateView
+from django.views.generic import ListView, FormView, CreateView, DetailView
 from django.urls import reverse, reverse_lazy
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 from blogs.forms import ContactForm, CommentForm
-from blogs.models import Article, Category, Tag, Comment, Contact
+from blogs.models import Article, Category, Tag, Comment, Contact, Like
 
 
 # Create your views here
+
+
+class PostDetailVew(DetailView):
+    model = Article
+    template_name = 'blogs/article_detail.html'
+    queryset = Category.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.likes.filter(article__slug=self.object.slug, user_id = self.request.user).exists():
+            context['is_likes']= True
+        else:
+            context['is_likes']= False
+        return context
 
 
 class PostDetailView(View):
     form_class = CommentForm
 
     def get(self, request, slug):
+
         article = get_object_or_404(Article, slug=slug)
         categories = Category.objects.all()
         resent_article = Article.objects.filter(is_published=True).order_by("-updated")[:3]
+        if request.user.likes.filter(article__slug=slug, user_id=request.user.id).exists():
+            is_likes= True
+        else:
+            is_likes= False
+
         return render(request, 'blogs/article_detail.html',
-                      {'article': article, 'resent_article': resent_article, 'categories': categories})
+                      {'article': article, 'resent_article': resent_article, 'categories': categories, 'is_likes':is_likes})
 
     def post(self, request, slug):
         article = get_object_or_404(Article, slug=slug)
@@ -41,6 +62,7 @@ class DeleteCommentView(View):
             comment.delete()
             messages.success(request, 'Youre comment is delete', 'warning')
             return redirect('blog:blog_detail', article.slug)
+
 
 #
 # class PostListView(View):
@@ -121,3 +143,14 @@ class ContactsView(CreateView):
         instance.user = self.request.user
         instance.save()
         return super().form_valid(form)
+
+
+class LikeView(LoginRequiredMixin, View):
+    def get(self, request, slug, pk):
+        try:
+            like = Like.objects.get(article__slug=slug, user_id=request.user.id)
+            like.delete()
+            return JsonResponse({'response':'dislike'})
+        except:
+            Like.objects.create(article_id=pk, user_id=request.user.id)
+            return JsonResponse({'response':'like'})
