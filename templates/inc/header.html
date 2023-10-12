@@ -57,7 +57,7 @@
                     {% endwith %}
                     {% if not request.user.is_authenticated %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'account:user_login' %}"> Login/Singup</a>
+                            <a class="nav-link" href="{% url 'account:user_login' %}?next={{ request.pach }}"> Login/Singup</a>
                             {% else %}
                             {% if user.profile.avatar %}
                                 <span> <img src="{{ user.profile.image.url }}" style="border-radius: 30px;" width="30"
@@ -73,7 +73,7 @@
 
                             <a class="nav-link" href="{% url 'account:edit_account' %}"
                                data-placeholder="&#xf207;">{{ request.user.username }}</a>
-                            <a class="nav-link" href="{% url 'account:user_logout' %}">logout</a>
+                            <a class="nav-link" href="{% url 'account:user_logout' %}?next={{ request.pach }}">logout</a>
 
 
                         </li>

@@ -68,31 +68,36 @@
                                         <div class="post-options">
                                             <div class="row">
                                                 <div class="col-6">
-                                                    <ul class="post-tags">
+                                                    {% if request.user.is_authenticated %}
+                                                        <ul class="post-tags">
                                                         {% if  is_likes %}
                                                             <li>
 
-                                                            <a id="like"
-                                                               onclick="like('{{ article.slug }}','{{ article.id }}' )"
-                                                               style="font-size: 20px" class="fa fa-heart"></a>
-                                                            <span id="count">{{ article.likes.all.count }}</span>
+                                                                <a id="like"
+                                                                   onclick="like('{{ article.slug }}','{{ article.id }}' )"
+                                                                   style="font-size: 20px" class="fa fa-heart"></a>
+                                                                <span id="count">{{ article.likes.all.count }}</span>
                                                             <li>
-                                                        {% else %}
+                                                                {% else %}
                                                             <li>
-                                                            <a id="like"
-                                                               onclick="like('{{ article.slug }}','{{ article.id }}')"
-                                                               style="font-size: 20px" class="fa fa-heart-o"></a>
-                                                            <span id="count">{{ article.likes.all.count }}</span>
+                                                                <a id="like"
+                                                                   onclick="like('{{ article.slug }}','{{ article.id }}')"
+                                                                   style="font-size: 20px" class="fa fa-heart-o"></a>
+                                                                <span id="count">{{ article.likes.all.count }}</span>
                                                             </li>
                                                         {% endif %}
                                                         </li>
-                                                        <br>
-                                                        <li><i class="fa fa-tags"></i></li>
-                                                        {% for tag in article.tag.all %}
-                                                            <li>
-                                                                <a href="{% url 'blog:tag_list' tag.id %}">{{ tag.title }}</a>,
-                                                            </li>
-                                                        {% endfor %}
+                                                    {% else %}
+                                                        <p>You cant like this post</p>
+                                                    {% endif %}
+
+                                                    <br>
+                                                    <li><i class="fa fa-tags"></i></li>
+                                                    {% for tag in article.tag.all %}
+                                                        <li>
+                                                            <a href="{% url 'blog:tag_list' tag.id %}">{{ tag.title }}</a>,
+                                                        </li>
+                                                    {% endfor %}
                                                     </ul>
                                                 </div>
                                                 {% include 'inc/social_network_link_share.html' %}
@@ -206,9 +211,11 @@
                                         <div class="content">
                                             <p class="alert alert-danger">If you wana post commnt first<a
                                                     style="color: #000000"
-                                                    href="{% url 'account:user_login' %}"> login </a> / <a
+                                                    href="{% url 'account:user_login' %}?next={% url 'blog:blog_detail' article.id %}">
+                                                login </a> / <a
                                                     style="color: #000000"
-                                                    href="{% url 'account:user_register' %}"> Register </a>
+                                                    href="{% url 'account:user_register' %}?next={% url 'blog:blog_detail' article.id %}">
+                                                Register </a>
                                             </p>
                                         </div>
                                     </div>

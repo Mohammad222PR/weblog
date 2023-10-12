@@ -18,7 +18,11 @@ def Login(request):
             user = authenticate(request, username=cd['username'], password=cd['password'])
             if user is not None:
                 login(request, user)
+                next_page = request.GET.get('next')
+                if next_page:
+                    return redirect(next_page)
                 return redirect('home:home')
+
     else:
         form = LoginForm()
     return render(request, 'account/login.html', {'form': form})
@@ -34,7 +38,12 @@ def Register(request):
             User.objects.create_user(cd['username'], cd['password1'], cd['password2'])
             user = authenticate(request, username=cd['username'], password=cd['password1'])
             login(request, user)
-            return redirect('home:home')
+            next_page = request.GET.get('next')
+            if next_page:
+                return redirect(next_page)
+            else:
+                return redirect('home:home')
+
     else:
         form = SingupForm()
     return render(request, 'account/register.html', {'form': form})
@@ -42,6 +51,10 @@ def Register(request):
 
 def Logout(request):
     logout(request)
+    next_page = request.GET.get('next')
+    if next_page:
+        return redirect(next_page)
+
     return redirect('home:home')
 
 

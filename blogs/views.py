@@ -14,35 +14,26 @@ from blogs.models import Article, Category, Tag, Comment, Contact, Like
 # Create your views here
 
 
-class PostDetailVew(DetailView):
-    model = Article
-    template_name = 'blogs/article_detail.html'
-    queryset = Category.objects.all()
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        if self.request.user.likes.filter(article__slug=self.object.slug, user_id = self.request.user).exists():
-            context['is_likes']= True
-        else:
-            context['is_likes']= False
-        return context
-
-
 class PostDetailView(View):
     form_class = CommentForm
 
     def get(self, request, slug):
-
         article = get_object_or_404(Article, slug=slug)
         categories = Category.objects.all()
         resent_article = Article.objects.filter(is_published=True).order_by("-updated")[:3]
-        if request.user.likes.filter(article__slug=slug, user_id=request.user.id).exists():
-            is_likes= True
-        else:
-            is_likes= False
+        if request.user.is_authenticated:
 
-        return render(request, 'blogs/article_detail.html',
-                      {'article': article, 'resent_article': resent_article, 'categories': categories, 'is_likes':is_likes})
+            if request.user.likes.filter(article__slug=slug, user_id=request.user.id).exists():
+                is_likes = True
+            else:
+                is_likes = False
+
+            return render(request, 'blogs/article_detail.html',
+                          {'article': article, 'resent_article': resent_article, 'categories': categories,
+                           'is_likes': is_likes})
+        else:
+            return render(request, 'blogs/article_detail.html',
+                          {'article': article, 'resent_article': resent_article, 'categories': categories})
 
     def post(self, request, slug):
         article = get_object_or_404(Article, slug=slug)
@@ -150,7 +141,7 @@ class LikeView(LoginRequiredMixin, View):
         try:
             like = Like.objects.get(article__slug=slug, user_id=request.user.id)
             like.delete()
-            return JsonResponse({'response':'dislike'})
+            return JsonResponse({'response': 'dislike'})
         except:
             Like.objects.create(article_id=pk, user_id=request.user.id)
-            return JsonResponse({'response':'like'})
+            return JsonResponse({'response': 'like'})
