@@ -28,9 +28,15 @@ class PostDetailView(View):
             else:
                 is_likes = False
 
+            if article.favorite.filter(id=request.user.id).exists():
+                is_fave = True
+            else:
+                is_fave = False
+
+
             return render(request, 'blogs/article_detail.html',
                           {'article': article, 'resent_article': resent_article, 'categories': categories,
-                           'is_likes': is_likes})
+                           'is_likes': is_likes, 'is_fave': is_fave})
         else:
             return render(request, 'blogs/article_detail.html',
                           {'article': article, 'resent_article': resent_article, 'categories': categories})
@@ -55,55 +61,69 @@ class DeleteCommentView(View):
             return redirect('blog:blog_detail', article.slug)
 
 
+class PostListView(View):
+    def get(self, request):
+        articles = Article.objects.filter(is_published=True)
+        tags = Tag.objects.all()
+        categories = Category.objects.all()
+        page_number = request.GET.get('page')
+        paginator = Paginator(articles, 1)
+        objects_list = paginator.get_page(page_number)
+
+        return render(request, 'blogs/article_list.html',
+                      {'articles': objects_list, 'tags': tags,
+                       'categories': categories})
+
+
+# class PostListView(ListView):
+#     model = Article
+#     paginate_by = 1
+#     context_object_name = 'articles'
+#     queryset = Article.objects.filter(is_published=True)
 #
-# class PostListView(View):
-#     def get(self, request):
-#         articles = Article.objects.filter(is_published=True)
-#         page_number = request.GET.get('page')
-#         paginator = Paginator(articles, 1)
-#         objects_list = paginator.get_page(page_number)
-#
-#         return render(request, 'blogs/article_list.html', {'articles': objects_list})
-
-
-class PostListView(ListView):
-    model = Article
-    paginate_by = 1
-    context_object_name = 'articles'
-    queryset = Article.objects.filter(is_published=True)
-
+#     def get_context_data(self, *, object_list=None, **kwargs):
+#         context = super(PostListView)
 
 class category_detail(View):
     def get(self, request, pk=None):
         category = get_object_or_404(Category, id=pk)
         articles = category.categories.all()
+        tags = Tag.objects.all()
+        categories = Category.objects.all()
         page_number = request.GET.get('page')
         paginator = Paginator(articles, 1)
         objects_list = paginator.get_page(page_number)
 
-        return render(request, "blogs/article_list.html", {'articles': objects_list, 'category': category})
+        return render(request, "blogs/article_list.html",
+                      {'articles': objects_list, 'category': category, 'tags': tags, 'categories': categories})
 
 
 class tag_detail(View):
     def get(self, request, pk=None):
         tag = get_object_or_404(Tag, id=pk)
-        articles = tag.tags.all()
+        articles = tag.articles.all()
+        tags = Tag.objects.all()
+        categories = Category.objects.all()
         page_number = request.GET.get('page')
         paginator = Paginator(articles, 1)
         objects_list = paginator.get_page(page_number)
 
-        return render(request, 'blogs/article_list.html', {'articles': objects_list, 'tag': tag})
+        return render(request, 'blogs/article_list.html',
+                      {'articles': objects_list, 'tag': tag, 'tags': tags, 'categories': categories})
 
 
 class SearchView(View):
     def get(self, request):
         q = request.GET.get('q')
         articles = Article.objects.filter(title__icontains=q)
+        tags = Tag.objects.all()
+        categories = Category.objects.all()
         page_number = request.GET.get('page')
         paginator = Paginator(articles, 1)
         objects_list = paginator.get_page(page_number)
 
-        return render(request, 'blogs/article_list.html', {'articles': objects_list, 'q': q})
+        return render(request, 'blogs/article_list.html',
+                      {'articles': objects_list, 'q': q, 'tags': tags, 'categories': categories})
 
 
 # class ContactsView(View):
@@ -145,3 +165,24 @@ class LikeView(LoginRequiredMixin, View):
         except:
             Like.objects.create(article_id=pk, user_id=request.user.id)
             return JsonResponse({'response': 'like'})
+
+
+class FavoriteView(LoginRequiredMixin, View):
+    def get(self, request, slug):
+        blog = Article.objects.get(slug=slug)
+
+        if blog.favorite.remove(id=request.user.id).exists():
+            blog.favorite.delete(request.user)
+            return JsonResponse({'response': 'deleted'})
+        else:
+            blog.favorite.add(request.user)
+            return JsonResponse({'response': 'added'})
+
+
+class FaveView(View):
+    def get(self, request, slug, pk):
+        blog = Article.objects.all(slug=slug)
+
+        if blog == request.user.id:
+            fave = blog.favorite.all(request.user)
+        return render(request, 'blogs/favoirte.html', {'favoirte': fave})

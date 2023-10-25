@@ -34,13 +34,14 @@ class Tag(models.Model):
 class Article(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='categories')
-    tag = models.ManyToManyField(Tag, related_name='tags')
+    tag = models.ManyToManyField(Tag, related_name='articles')
     title = models.CharField(max_length=100)
     body = models.TextField(max_length=100000)
     image = models.ImageField(upload_to='images/articles')
     created = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(max_length=100, blank=True, null=True, unique=True)
     updated = models.DateTimeField(auto_now=True)
+    favorite = models.ManyToManyField(User,default=None, blank=None, null=None, related_name='favorite' )
     is_published = models.BooleanField(default=True)
 
     # custom_manager = ArticleManger()

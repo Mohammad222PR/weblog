@@ -33,7 +33,7 @@
                     <div class="content">
                         <ul>
                             {% for category in categories %}
-                                <li><a href="{% url 'blog:cat_list' category.id %}">- {{ category.title }}</a></li>
+                                <li><a href="{% url 'blog:cat_list' category.id %}">- {{ category.title }} {{ category.categories.all.count }}</a></li>
                             {% endfor %}
 
                         </ul>
@@ -48,7 +48,7 @@
                     <div class="content">
                         <ul>
                             {% for tag in article.tag.all %}
-                                <li><a href="{% url 'blog:tag_list' tag.id %}">{{ tag.title }}</a></li>
+                                <li><a href="{% url 'blog:tag_list' tag.id %}">{{ tag.title }} {{ tag.articles.all.count }}</a> </li>
                             {% endfor %}
                         </ul>
                     </div>

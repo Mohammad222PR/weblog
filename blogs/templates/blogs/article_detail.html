@@ -70,7 +70,7 @@
                                                 <div class="col-6">
                                                     {% if request.user.is_authenticated %}
                                                         <ul class="post-tags">
-                                                        {% if  is_likes %}
+                                                        {% if is_likes %}
                                                             <li>
 
                                                                 <a id="like"
@@ -84,6 +84,20 @@
                                                                    onclick="like('{{ article.slug }}','{{ article.id }}')"
                                                                    style="font-size: 20px" class="fa fa-heart-o"></a>
                                                                 <span id="count">{{ article.likes.all.count }}</span>
+                                                            </li>
+                                                        {% endif %}
+                                                        {% if is_fave %}
+                                                            <li>
+
+                                                                <a id="fave"
+                                                                   onclick="fave('{{ article.slug }}' )"
+                                                                   style="font-size: 20px" class="fa fa-heart"></a>
+                                                            <li>
+                                                                {% else %}
+                                                            <li>
+                                                                <a id="fave"
+                                                                   onclick="fave('{{ article.slug }}')"
+                                                                   style="font-size: 20px" class="fa fa-heart-o"></a>
                                                             </li>
                                                         {% endif %}
                                                         </li>
@@ -256,6 +270,19 @@
 
             })
         }
+            function fave(slug) {
+                var element = document.getElementById("fave")
+                $.get(`/articles/favorite/${slug}`).then(response => {
+                    if (response['response'] === "added") {
+                        element.className = 'fa fa-heart'
+                    } else {
+                        element.className = 'fa fa-heart-o'
+
+                    }
+
+                })
+            }
+
     </script>
 
 {% endblock %}
