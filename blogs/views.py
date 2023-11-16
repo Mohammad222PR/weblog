@@ -168,21 +168,23 @@ class LikeView(LoginRequiredMixin, View):
 
 
 class FavoriteView(LoginRequiredMixin, View):
-    def get(self, request, slug):
-        blog = Article.objects.get(slug=slug)
+    def get(self, request, id):
+        blog = Article.objects.get(id=id)
 
-        if blog.favorite.remove(id=request.user.id).exists():
-            blog.favorite.delete(request.user)
+        if blog.favorite.filter(id=request.user.id).exists():
+            blog.favorite.remove(request.user.id)
             return JsonResponse({'response': 'deleted'})
         else:
             blog.favorite.add(request.user)
             return JsonResponse({'response': 'added'})
 
 
-class FaveView(View):
-    def get(self, request, slug, pk):
-        blog = Article.objects.all(slug=slug)
+class FaveView(ListView):
+    template_name = 'blogs/favorite.html'
+    model = Article
+    paginate_by = 10
+    context_object_name = 'articles'
 
-        if blog == request.user.id:
-            fave = blog.favorite.all(request.user)
-        return render(request, 'blogs/favoirte.html', {'favoirte': fave})
+    def get_queryset(self):
+        return Article.objects.filter(favorite=self.request.user)
+

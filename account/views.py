@@ -59,8 +59,7 @@ def Logout(request):
 
 
 def EditAccountView(request):
-    if request.user.is_authenticated:
-        return redirect('home:home')
+    
     user = request.user
     form = EditAccountForm(instance=user)
     if request.method == 'POST':

@@ -41,10 +41,10 @@ INSTALLED_APPS = [
     'django_cleanup.apps.CleanupConfig',
     'django_render_partial',
     'django_social_share',
-    'widget_tweaks',
 
 
     # App.
+    'widget_tweaks',
     'home.apps.HomeConfig',
     'account.apps.AccountConfig',
     'blogs.apps.BlogsConfig',

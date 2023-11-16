@@ -12,6 +12,7 @@ urlpatterns = [
     path('search', views.SearchView.as_view(), name='search'),
     path('contact', views.ContactsView.as_view(), name='contact'),
     path('like/<slug:slug>/<int:pk>', views.LikeView.as_view(), name='like_article'),
-    path('favorite/<slug:slug>', views.FavoriteView.as_view(), name='favorite_article'),
+    path('favorite/<int:id>', views.FavoriteView.as_view(), name='favorite_article'),
+    path('favorite/list', views.FaveView.as_view(), name='favorite_list')
 
 ]

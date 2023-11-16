@@ -90,14 +90,15 @@
                                                             <li>
 
                                                                 <a id="fave"
-                                                                   onclick="fave('{{ article.slug }}' )"
-                                                                   style="font-size: 20px" class="fa fa-heart"></a>
+                                                                   onclick="fave({{ article.id }})"
+                                                                   style="font-size: 20px" class="fa fa-heart">favortie</a>
                                                             <li>
+                                                                <br>
                                                                 {% else %}
                                                             <li>
                                                                 <a id="fave"
-                                                                   onclick="fave('{{ article.slug }}')"
-                                                                   style="font-size: 20px" class="fa fa-heart-o"></a>
+                                                                   onclick="fave({{ article.id }})"
+                                                                   style="font-size: 20px" class="fa fa-heart-o">favortie</a>
                                                             </li>
                                                         {% endif %}
                                                         </li>
@@ -270,9 +271,9 @@
 
             })
         }
-            function fave(slug) {
+            function fave(id) {
                 var element = document.getElementById("fave")
-                $.get(`/articles/favorite/${slug}`).then(response => {
+                $.get(`/articles/favorite/${id}`).then(response => {
                     if (response['response'] === "added") {
                         element.className = 'fa fa-heart'
                     } else {
