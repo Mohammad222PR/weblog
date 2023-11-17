@@ -157,6 +157,10 @@ class ContactsView(CreateView):
 
 
 class LikeView(LoginRequiredMixin, View):
+    """
+    Create object like for post
+    and check member has like this post or no
+    """
     def get(self, request, slug, pk):
         try:
             like = Like.objects.get(article__slug=slug, user_id=request.user.id)
@@ -168,6 +172,9 @@ class LikeView(LoginRequiredMixin, View):
 
 
 class FavoriteView(LoginRequiredMixin, View):
+    """
+    Add favorite article to favorite
+    """
     def get(self, request, id):
         blog = Article.objects.get(id=id)
 
@@ -175,11 +182,14 @@ class FavoriteView(LoginRequiredMixin, View):
             blog.favorite.remove(request.user.id)
             return JsonResponse({'response': 'deleted'})
         else:
-            blog.favorite.add(request.user)
+            blog.favorite.add(request.user.id)
             return JsonResponse({'response': 'added'})
 
 
 class FaveView(ListView):
+    """
+    List Favorite Article
+    """
     template_name = 'blogs/favorite.html'
     model = Article
     paginate_by = 10
@@ -187,4 +197,3 @@ class FaveView(ListView):
 
     def get_queryset(self):
         return Article.objects.filter(favorite=self.request.user)
-
