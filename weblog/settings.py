@@ -44,7 +44,6 @@ INSTALLED_APPS = [
 
 
     # App.
-    'widget_tweaks',
     'home.apps.HomeConfig',
     'account.apps.AccountConfig',
     'blogs.apps.BlogsConfig',

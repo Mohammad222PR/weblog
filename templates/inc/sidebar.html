@@ -48,7 +48,7 @@
                     <div class="content">
                         <ul>
                             {% for tag in article.tag.all %}
-                                <li><a href="{% url 'blog:tag_list' tag.id %}">{{ tag.title }} {{ tag.articles.all.count }}</a> </li>
+                                <li><a href="{% url 'blog:tag_list' tag.id %}">{{ tag.title }} {{ tag.articles.count }}</a> </li>
                             {% endfor %}
                         </ul>
                     </div>

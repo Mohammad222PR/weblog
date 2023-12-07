@@ -10,6 +10,6 @@ from blogs.views import PostDetailView
 class HomeView(View):
     def get(self, request):
         articles = Article.objects.filter(is_published=True).order_by("-created", )[:5]
-        tags = Tag.objects.all()
-        categories = Category.objects.all()
+        tags = Tag.objects.prefetch_related('articles').all()
+        categories = Category.objects.prefetch_related('articles').all()
         return render(request, 'home/index.html', {'articles': articles, 'tags': tags, 'categories': categories})
