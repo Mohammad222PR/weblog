@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils.html import mark_safe, escape, format_html
 
 
 # Create your models here.
@@ -41,7 +42,7 @@ class Article(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(max_length=100, blank=True, null=True, unique=True)
     updated = models.DateTimeField(auto_now=True)
-    favorite = models.ManyToManyField(User,default=None, blank=None, related_name='favorite' )
+    favorite = models.ManyToManyField(User, default=None, blank=None, related_name='favorite')
     is_published = models.BooleanField(default=True)
 
     # custom_manager = ArticleManger()
@@ -49,6 +50,9 @@ class Article(models.Model):
     def __str__(self):
         return self.title
 
+    def image_tag(self):
+        return format_html("<img src='{}' width=100 height=100 style='border-radius: 10px;'>".format(self.image.url))
+    image_tag.short_description = 'image '
         ###########################################################################################
         # Save method : if title send database this method run and create new tag from title name.#
         ###########################################################################################
@@ -91,5 +95,3 @@ class Contact(models.Model):
 class Like(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='likes')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='likes')
-
-

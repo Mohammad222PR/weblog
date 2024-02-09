@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load %}
 {% block contact %}
 
 
@@ -38,43 +39,57 @@
                                     {% if request.user.is_authenticated %}
                                         {% include 'inc/messages.html' %}
                                         <div class="content">
-                                            <form id="contact" action="" method="post">
+                                            <form id="contact" method="post">
                                                 {% csrf_token %}
                                                 <div class="row">
                                                     <div class="col-md-6 col-sm-12">
                                                         <fieldset>
-                                                            <bold>Username:</bold>
-                                                            {{ form.username|attr:'form-control'|attr:'placeholder:Enter Username' }}
+                                                            <label for="{{ form.username.id_for_label }}">Username:</label>
+                                                            <input type="text" class="form-control"
+                                                                   placeholder="Enter Username"
+                                                                   name="{{ form.username.name }}"
+                                                                   value="{{ form.username.value }}">
                                                         </fieldset>
                                                     </div>
                                                     <div class="col-md-6 col-sm-12">
                                                         <fieldset>
-                                                            <bold>Email:</bold>
-                                                            {{ form.email|attr:'form-control'|attr:'placeholder:Enter Email' }}
+                                                            <label for="{{ form.email.id_for_label }}">Email:</label>
+                                                            <input type="email" class="form-control"
+                                                                   placeholder="Enter Email"
+                                                                   name="{{ form.email.name }}"
+                                                                   value="{{ form.email.value }}">
                                                         </fieldset>
                                                     </div>
                                                     <div class="col-md-6 col-sm-12">
                                                         <fieldset>
-                                                            <bold>First_name:</bold>
-                                                            {{ form.first_name|attr:'form-control'|attr:'placeholder:Enter first_name' }}
+                                                            <label for="{{ form.first_name.id_for_label }}">First
+                                                                Name:</label>
+                                                            <input type="text" class="form-control"
+                                                                   placeholder="Enter First Name"
+                                                                   name="{{ form.first_name.name }}"
+                                                                   value="{{ form.first_name.value }}">
                                                         </fieldset>
                                                     </div>
                                                     <div class="col-md-6 col-sm-12">
                                                         <fieldset>
-                                                            <bold>Last_name:</bold>
-                                                            {{ form.last_name|attr:'form-control'|attr:'placeholder:Enter last_name' }}
+                                                            <label for="{{ form.last_name.id_for_label }}">Last
+                                                                Name:</label>
+                                                            <input type="text" class="form-control"
+                                                                   placeholder="Enter Last Name"
+                                                                   name="{{ form.last_name.name }}"
+                                                                   value="{{ form.last_name.value }}">
                                                         </fieldset>
                                                     </div>
-
                                                     <div class="col-lg-12">
                                                         <fieldset>
                                                             <button type="submit" id="form-submit" class="main-button">
-                                                                Send Message
+                                                                Update Profile
                                                             </button>
                                                         </fieldset>
                                                     </div>
                                                 </div>
                                             </form>
+
                                         </div>
                                         </div>
                                         </div>
@@ -128,6 +143,6 @@
                                         </div>
                                     {% endif %}
 
-                                    <p> <a href="{% url 'blog:favorite_list'%}">favorte</a></p>
+    <p><a href="{% url 'blog:favorite_list' %}">favorte</a></p>
 
 {% endblock %}

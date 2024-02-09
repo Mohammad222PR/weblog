@@ -1,7 +1,7 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-
 from account.forms import LoginForm, SingupForm, EditAccountForm
 
 
@@ -49,6 +49,7 @@ def Register(request):
     return render(request, 'account/register.html', {'form': form})
 
 
+@login_required
 def Logout(request):
     logout(request)
     next_page = request.GET.get('next')
@@ -58,8 +59,8 @@ def Logout(request):
     return redirect('home:home')
 
 
+@login_required
 def EditAccountView(request):
-    
     user = request.user
     form = EditAccountForm(instance=user)
     if request.method == 'POST':

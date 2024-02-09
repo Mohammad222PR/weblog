@@ -33,7 +33,6 @@ class PostDetailView(View):
             else:
                 is_fave = False
 
-
             return render(request, 'blogs/article_detail.html',
                           {'article': article, 'resent_article': resent_article, 'categories': categories,
                            'is_likes': is_likes, 'is_fave': is_fave})
@@ -67,7 +66,7 @@ class PostListView(View):
         tags = Tag.objects.all()
         categories = Category.objects.all()
         page_number = request.GET.get('page')
-        paginator = Paginator(articles, 1)
+        paginator = Paginator(articles, 3)
         objects_list = paginator.get_page(page_number)
 
         return render(request, 'blogs/article_list.html',
@@ -87,7 +86,7 @@ class PostListView(View):
 class category_detail(View):
     def get(self, request, pk=None):
         category = get_object_or_404(Category, id=pk)
-        articles = category.categories.all()
+        articles = category.articles.all()
         tags = Tag.objects.all()
         categories = Category.objects.all()
         page_number = request.GET.get('page')
@@ -161,6 +160,7 @@ class LikeView(LoginRequiredMixin, View):
     Create object like for post
     and check member has like this post or no
     """
+
     def get(self, request, slug, pk):
         try:
             like = Like.objects.get(article__slug=slug, user_id=request.user.id)
@@ -175,6 +175,7 @@ class FavoriteView(LoginRequiredMixin, View):
     """
     Add favorite article to favorite
     """
+
     def get(self, request, id):
         blog = Article.objects.get(id=id)
 
