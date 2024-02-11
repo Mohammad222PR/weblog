@@ -11,7 +11,7 @@ from account.forms import LoginForm, SingupForm, EditAccountForm
 def Login(request):
     if request.user.is_authenticated:
         return redirect('home:home')
-    if request.method == "POST":
+    if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
@@ -21,7 +21,7 @@ def Login(request):
                 next_page = request.GET.get('next')
                 if next_page:
                     return redirect(next_page)
-                return redirect('home:home')
+                return redirect('account:profile')
 
     else:
         form = LoginForm()
@@ -60,14 +60,12 @@ def Logout(request):
 
 
 @login_required
-def EditAccountView(request):
+def ProfileView(request):
     user = request.user
     form = EditAccountForm(instance=user)
     if request.method == 'POST':
         form = EditAccountForm(instance=user, data=request.POST)
         if form.is_valid():
-            edit = form.save()
-            edit.user = request.user
-            edit.save()
+            form.save()
             return redirect('account:edit_account')
     return render(request, 'account/edit_account.html', {'form': form})
