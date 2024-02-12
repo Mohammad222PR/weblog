@@ -1,16 +1,20 @@
-from django.contrib.auth.models import User
+from datetime import timedelta
+
+from django.utils import timezone
 from django.db import models
+from django.contrib.auth.models import *
 
 
 # Create your models here.
 
+class User(AbstractUser):
+    is_author = models.BooleanField(default=False, verbose_name='author status')
+    special_user = models.DateTimeField(default=timezone.now(), verbose_name='special user')
 
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='images/profile', blank=True, null=True)
-    email = models.EmailField(max_length=200)
-    name = models.CharField(max_length=400)
-    bio = models.TextField(max_length=200)
-
-    def __str__(self):
-        return f'{self.user} -- {self.image} -- {self.email}'
+    def is_special_user(self):
+        if self.special_user > timezone.now():
+            return True
+        else:
+            return False
+    is_special_user.boolean = True
+    is_special_user.short_description = 'special user status'

@@ -1,6 +1,7 @@
-from django.contrib.auth.models import User
+from account.models import User
 from django.db import models
-from django.utils.html import mark_safe, escape, format_html
+from django.urls import reverse
+from django.utils.html import format_html
 
 
 # Create your models here.
@@ -33,6 +34,11 @@ class Tag(models.Model):
 #         return super(ArticleManger, self).get_queryset().filter(is_published = True)
 
 class Article(models.Model):
+    STATUS = [
+        ("Publish", "P"),
+        ("Unpublished", "U"),
+        ("Draft", "D")
+    ]
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='articles')
     tag = models.ManyToManyField(Tag, related_name='articles')
@@ -42,8 +48,8 @@ class Article(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(max_length=100, blank=True, null=True, unique=True)
     updated = models.DateTimeField(auto_now=True)
-    favorite = models.ManyToManyField(User, default=None, blank=None, related_name='favorite')
-    is_published = models.BooleanField(default=True)
+    favorite = models.ManyToManyField(User, default=None, blank=True, null=True, related_name='favorite')
+    status = models.CharField(max_length=20, choices=STATUS, default="D")
 
     # custom_manager = ArticleManger()
 
@@ -52,10 +58,12 @@ class Article(models.Model):
 
     def image_tag(self):
         return format_html("<img src='{}' width=100 height=100 style='border-radius: 10px;'>".format(self.image.url))
+
     image_tag.short_description = 'image '
-        ###########################################################################################
-        # Save method : if title send database this method run and create new tag from title name.#
-        ###########################################################################################
+
+    ###########################################################################################
+    # Save method : if title send database this method run and create new tag from title name.#
+    ###########################################################################################
 
     class Meta:
         ordering = ('-created',)

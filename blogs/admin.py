@@ -6,7 +6,7 @@ from .models import *
 
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
-    list_display = ('title','image_tag' ,'created', 'category')
+    list_display = ('title','image_tag' ,'created', 'category', 'status')
     prepopulated_fields = {'slug': ('title',)}
     readonly_fields = ['image_tag']
 

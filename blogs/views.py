@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from account.models import User
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
@@ -20,7 +20,7 @@ class PostDetailView(View):
     def get(self, request, slug):
         article = get_object_or_404(Article, slug=slug)
         categories = Category.objects.all()
-        resent_article = Article.objects.filter(is_published=True).order_by("-updated")[:3]
+        resent_article = Article.objects.filter(status='P').order_by("-updated")[:3]
         if request.user.is_authenticated:
 
             if request.user.likes.filter(article__slug=slug, user_id=request.user.id).exists():
@@ -62,7 +62,7 @@ class DeleteCommentView(View):
 
 class PostListView(View):
     def get(self, request):
-        articles = Article.objects.filter(is_published=True)
+        articles = Article.objects.filter(status="Publish")
         tags = Tag.objects.all()
         categories = Category.objects.all()
         page_number = request.GET.get('page')

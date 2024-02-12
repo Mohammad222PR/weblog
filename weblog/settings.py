@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 from os import path
 
+from weblog.local_settings import *
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -41,6 +43,8 @@ INSTALLED_APPS = [
     'django_cleanup.apps.CleanupConfig',
     'django_render_partial',
     'django_social_share',
+    'crispy_forms',
+
 
 
     # App.
@@ -83,9 +87,12 @@ WSGI_APPLICATION = 'weblog.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": DB_NAME,
+        "USER": DB_USER,
+        "PASSWORD": DB_PASSWORD,
+        "DB_HOST": DB_HOST,
     }
 }
 
@@ -134,7 +141,12 @@ MEDIA_ROOT = path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
+# Url path.
 LOGIN_URL = 'account/login.html'
-
 LOGIN_REDIRECT_URL = 'home:home'
+# Crispy Config.
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# User config
+AUTH_USER_MODEL = 'account.User'
+

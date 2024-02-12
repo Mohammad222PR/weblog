@@ -63,7 +63,7 @@
                                             <li><a href="#">{{ article.created }}</a></li>
                                             <li><a href="#">{{ article.comments.count }} Comments</a></li>
                                         </ul>
-                                        <p>{{ article.body }}</p>
+                                        <p>{{ article.body|safe  }}</p>
 
                                         <div class="post-options">
                                             <div class="row">

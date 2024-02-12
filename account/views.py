@@ -1,14 +1,19 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login as auth_login, logout
+from account.models import User
+from django.urls import reverse_lazy
+
 from account.forms import LoginForm, SingupForm, EditAccountForm
+from blogs.models import Article
+from django.views import generic
 
 
 # Create your views here.
 
 
-def Login(request):
+def login(request):
     if request.user.is_authenticated:
         return redirect('home:home')
     if request.method == 'POST':
@@ -17,7 +22,7 @@ def Login(request):
             cd = form.cleaned_data
             user = authenticate(request, username=cd['username'], password=cd['password'])
             if user is not None:
-                login(request, user)
+                auth_login(request, user)
                 next_page = request.GET.get('next')
                 if next_page:
                     return redirect(next_page)
@@ -28,7 +33,7 @@ def Login(request):
     return render(request, 'account/login.html', {'form': form})
 
 
-def Register(request):
+def register(request):
     if request.user.is_authenticated:
         return redirect('home:home')
     if request.method == "POST":
@@ -50,7 +55,7 @@ def Register(request):
 
 
 @login_required
-def Logout(request):
+def logout(request):
     logout(request)
     next_page = request.GET.get('next')
     if next_page:
@@ -60,12 +65,42 @@ def Logout(request):
 
 
 @login_required
-def ProfileView(request):
+def profile_view(request):
     user = request.user
     form = EditAccountForm(instance=user)
+    if request.method == 'GET':
+        if user.is_superuser:
+            articles = Article.objects.all().order_by('-created')
+        elif user.is_author:
+            articles = Article.objects.filter(author=request.user).order_by('-created')
+        else:
+            return redirect('account:profile-edit', user.id)
+    return render(request, 'account/index.html', {'form': form, 'articles': articles})
+
+
+@login_required()
+def article_search(request):
+    if request.method == 'GET':
+        q = request.GET.get('q')
+        articles = Article.objects.filter(title__icontains=q)
+        return render(request, 'account/index.html', {'articles': articles, 'q': q})
+
+
+@login_required
+def profile_normal_user_view(request):
+    user = request.user
+    form = EditAccountForm(instance=user)
+
     if request.method == 'POST':
         form = EditAccountForm(instance=user, data=request.POST)
         if form.is_valid():
             form.save()
-            return redirect('account:edit_account')
+            return redirect('account:profile-edit')
     return render(request, 'account/edit_account.html', {'form': form})
+
+
+class ArticleCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Article
+    fields = '__all__'
+    template_name = 'account/article-create-update.html'
+    success_url = reverse_lazy('account:profile')

@@ -1,0 +1,61 @@
+{% extends 'base_lte.html' %}
+{% load crispy_forms_tags %}
+
+
+
+{% block head_title %}{% block title-head %}
+    
+    Add Article
+{% endblock %}{% endblock %}
+
+{% block nav_title %}
+    Add Article
+{% endblock %}
+{% block content %}
+    <div class="col-md-12" style="padding-right: 30px;padding-left: 30px">
+        <div class="card card-primary">
+            <div class="card-header" style="align-content: center">
+                <h3 class="card-title mb-0 float-left">Form add article</h3>
+            </div>
+
+            <div style="padding-right: 20px;">
+                <form action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-6">
+                            {{ form.author|as_crispy_field }}
+                        </div>
+                        <div class="col-6">
+                            {{ form.status|as_crispy_field }}
+                        </div>
+                        <div class="col-6">
+                            {{ form.category|as_crispy_field }}
+                        </div>
+                        <div class="col-6">
+                            {{ form.tag|as_crispy_field }}
+                        </div>
+                        <div class="col-6">
+                            {{ form.title|as_crispy_field }}
+                        </div>
+                        <div class="col-6">
+                            {{ form.slug|as_crispy_field }}
+                        </div>
+
+
+
+
+                        <div class="col-7">
+                            {{ form.body|as_crispy_field }}
+                        </div>
+                        <div class="col-6">
+                            {{ form.image|as_crispy_field }}
+                        </div>
+
+
+                    </div>
+                    <button class="btn btn-success" type="submit">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
