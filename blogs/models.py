@@ -59,7 +59,7 @@ class Article(models.Model):
     def image_tag(self):
         return format_html("<img src='{}' width=100 height=100 style='border-radius: 10px;'>".format(self.image.url))
 
-    image_tag.short_description = 'image '
+    image_tag.short_description = 'image'
 
     ###########################################################################################
     # Save method : if title send database this method run and create new tag from title name.#

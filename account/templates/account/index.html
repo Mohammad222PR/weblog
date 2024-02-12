@@ -19,7 +19,7 @@
                     <div class="card-header">
                         {% if request.user.is_superuser %}
                             <h3 class="card-title"> Articles</h3>
-                        {% elif request.user.is_staff %}
+                        {% elif request.user.is_author %}
                             <h3 class="card-title">youre Articles</h3>
                         {% endif %}
                         <form action="{% url 'account:search' %}" method="GET" name="gs">

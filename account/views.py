@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login as auth_login, logout
+from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from account.models import User
 from django.urls import reverse_lazy
 
@@ -42,7 +42,7 @@ def register(request):
             cd = form.cleaned_data
             User.objects.create_user(cd['username'], cd['password1'], cd['password2'])
             user = authenticate(request, username=cd['username'], password=cd['password1'])
-            login(request, user)
+            auth_login(request, user)
             next_page = request.GET.get('next')
             if next_page:
                 return redirect(next_page)
@@ -56,7 +56,7 @@ def register(request):
 
 @login_required
 def logout(request):
-    logout(request)
+    auth_logout(request)
     next_page = request.GET.get('next')
     if next_page:
         return redirect(next_page)
@@ -69,13 +69,14 @@ def profile_view(request):
     user = request.user
     form = EditAccountForm(instance=user)
     if request.method == 'GET':
-        if user.is_superuser:
-            articles = Article.objects.all().order_by('-created')
-        elif user.is_author:
-            articles = Article.objects.filter(author=request.user).order_by('-created')
-        else:
-            return redirect('account:profile-edit', user.id)
-    return render(request, 'account/index.html', {'form': form, 'articles': articles})
+        if request.user.is_authenticated:
+            if user.is_superuser:
+                articles = Article.objects.all().order_by('-created')
+            elif user.is_author:
+                articles = Article.objects.filter(author=request.user).order_by('-created')
+            else:
+                return redirect('account:profile-edit', user.id)
+        return render(request, 'account/index.html', {'form': form, 'articles': articles})
 
 
 @login_required()
