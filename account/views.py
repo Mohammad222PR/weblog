@@ -1,13 +1,16 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render, redirect
+from django.http import Http404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
+
+from account.mixins import FieldsMixin, FormValidMixin, ArticleUpdateMixin, ArticleDeleteMixin
 from account.models import User
 from django.urls import reverse_lazy
 
 from account.forms import LoginForm, SingupForm, EditAccountForm
 from blogs.models import Article
-from django.views import generic
+from django.views import generic, View
 
 
 # Create your views here.
@@ -56,23 +59,23 @@ def register(request):
 
 @login_required
 def logout(request):
-    auth_logout(request)
-    next_page = request.GET.get('next')
-    if next_page:
-        return redirect(next_page)
+    if request.user.is_authenticated:
+        auth_logout(request)
+        next_page = request.GET.get('next')
+        if next_page:
+            return redirect(next_page)
 
-    return redirect('home:home')
+        return redirect('home:home')
 
 
-@login_required
-def profile_view(request):
-    user = request.user
-    form = EditAccountForm(instance=user)
-    if request.method == 'GET':
+class ProfileView(LoginRequiredMixin, View):
+    def get(self, request):
+        user = request.user
+        form = EditAccountForm(instance=user)
         if request.user.is_authenticated:
             if user.is_superuser:
                 articles = Article.objects.all().order_by('-created')
-            elif user.is_author:
+            elif user.is_author or user.is_staff:
                 articles = Article.objects.filter(author=request.user).order_by('-created')
             else:
                 return redirect('account:profile-edit', user.id)
@@ -100,8 +103,22 @@ def profile_normal_user_view(request):
     return render(request, 'account/edit_account.html', {'form': form})
 
 
-class ArticleCreateView(LoginRequiredMixin, generic.CreateView):
+class ArticleCreateView(FieldsMixin, LoginRequiredMixin, FormValidMixin, generic.CreateView):
     model = Article
     fields = '__all__'
     template_name = 'account/article-create-update.html'
     success_url = reverse_lazy('account:profile')
+
+
+class ArticleUpdateView(FieldsMixin, LoginRequiredMixin, ArticleUpdateMixin, FormValidMixin, generic.UpdateView):
+    model = Article
+    fields = '__all__'
+    template_name = 'account/article-create-update.html'
+    success_url = reverse_lazy('account:profile')
+
+
+class ArticleDeleteView(LoginRequiredMixin, ArticleDeleteMixin, generic.DeleteView):
+    model = Article
+    template_name = 'account/article_confirm_delete.html'
+    success_url = reverse_lazy('account:profile')
+

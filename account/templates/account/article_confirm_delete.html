@@ -1,0 +1,30 @@
+{% extends 'base_lte.html' %}
+{% block head_title %}
+    article delete
+{% endblock %}
+{% block nav_title %}
+    <p>deleted {% if request.user.is_superuser %}{{ article.title }}{% endif %}</p>
+{% endblock %}
+{% block content %}
+
+    {% if request.user.is_superuser %}
+        <div class="col-md-8 text-center mx-auto">
+            <div class="card card-danger">
+                <div class="card-header">
+                    <h3 class="card-title mb-0 float-left text-center">حذف مقاله</h3>
+                </div>
+                <div class="card-body">
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <p class="py-2"> ایا از حذف مقاله«{{ object.title }}» از «{{ object.author.username }}»مطمعنی ؟</p>
+                        <br>
+                        <input type="submit" value="بله" class="btn btn-outline-success">
+                        <a href="{% url 'account:profile' %}" class="btn btn-outline-danger">خیر</a>
+                    </form>
+                </div>
+            </div>
+
+    {% else %}
+        <h1>You can't see this page</h1>
+    {% endif %}
+{% endblock %}

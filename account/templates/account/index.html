@@ -4,23 +4,23 @@
     article
 {% endblock %}
 {% block nav_title %}
-	Article
+    Article
 {% endblock %}
 {% block content %}
 
-    <!DOCTYPE html>
-    <html>
-    <body class="hold-transition sidebar-mini layout-fixed">
-    <div class="wrapper">
+
+
 
         <div class="row">
             <div class="col-12">
+            {% if articles %}
                 <div class="card">
                     <div class="card-header">
                         {% if request.user.is_superuser %}
-                            <h3 class="card-title"> Articles</h3>
-                        {% elif request.user.is_author %}
-                            <h3 class="card-title">youre Articles</h3>
+                            <h3 class="card-title"> مقاله ها</h3>
+
+                        {% elif request.user.is_author or request.user.is_staff %}
+                            <h3 class="card-title">مقاله های شما</h3>
                         {% endif %}
                         <form action="{% url 'account:search' %}" method="GET" name="gs">
                             <div class="card-tools">
@@ -33,38 +33,43 @@
                                         <button type="submit" class="btn btn-default"><i class="fas fa-search"></i>
                                         </button>
                                     </div>
+
                         </form>
+
                     </div>
                 </div>
             </div>
 
             <!-- /.card-header -->
-            <div class="card-body table-responsive p-0">
+
+    <div class="card-body table-responsive p-0">
                 <table class="table table-hover">
                     <thead>
                     <tr>
-                        <th>title</th>
-                        <th>image</th>
-                        <th>category</th>
-                        <th>tag</th>
-                        <th>author</th>
-                        <th>body</th>
-                        <th>created</th>
-                        <th>updated</th>
-                        <th>status</th>
+                        <th>عنوان</th>
+                        <th>عکس بند انگشتی</th>
+                        <th>دسته بندی</th>
+                        <th>تگ</th>
+                        <th>نوسینده</th>
+                        <th>متن</th>
+                        <th>تاریخ انتشار</th>
+                        <th>تاریخ بروزرسانی</th>
+                        <th>وضعیت</th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for article in articles %}
                         <tr>
+
                         <td>{{ article.title }}</td>
                         <td><img src="{{ article.image.url }}" width="120px" alt=""></td>
                         <td>{{ article.category }}</td>
                         <td>
                             {% for tag in article.tag.all %}
                                 <ul>
-                                <li class="list list-group">{{ tag }}</li>
-                            </ul>
+                                    <li class="list list-group">{{ tag }}</li>
+                                </ul>
                             {% endfor %}</td>
                         <td>{{ article.author }}</td>
                         <td>{{ article.body|striptags|truncatewords:10 }}</td>
@@ -72,27 +77,57 @@
                         <td>{{ article.updated|date:"Y-M-W" }}</td>
 
                         <td>
-                            {% if article.status == "Publish" %}
-                                <span class="badge badge-success">Publish</span>
+
+
+
+
+                       {% if article.status == "Publish" %}
+                                <span class="badge badge-success">انتشار</span>
                                 <br>
                                 <br>
                                 <a target="_blank" href="{% url 'blog:blog_detail' article.slug %}"
-                                   class="badge badge-primary">show
-                                    article in site</a>
+                                   class="badge badge-primary">نشون دادن داخل سایت</a>
                             {% elif article.status == "Draft" %}
-                                <span class="badge badge-warning">Draft</span>
+                                <span class="badge badge-warning">پیش نویس</span>
 
                             {% else %}
-                                <span class="badge badge-danger">Not publish</span>
+                                <span class="badge badge-danger">بسته</span>
                             {% endif %}
+                            <br><br>
+                        {% if request.user.is_superuser %}
+                            <a href="{% url 'account:article-delete' article.pk %}" class="badge badge-danger">حذف</a>
+                        {% endif %}
                         </td>
+                        {% if article.status == 'Publish' and request.user.is_superuser %}
+
+                            <td>
+                                <a href="{% url 'account:article-update' article.slug %}"
+                                   class="nav-icon fas fa-edit"></a>
+                            </td>
+                        {% elif article.status == 'Draft' and request.user.is_author or request.user.is_superuser %}
+
+                            <td>
+                                <a href="{% url 'account:article-update' article.slug %}"
+                                   class="nav-icon fas fa-edit"></a>
+                            </td>
+                            </td>
+                        {% endif %}
+
+
+
+
                     {% endfor %}
+                    </tr>
 
 
                     </tbody>
                 </table>
+    {% else %}
+                <h3>مقاله ای وجود ندارد.</h3>
+{% endif %}
             </div>
-            <!-- /.card-body -->
+        </div>
+        <!-- /.card-body -->
         </div>
         <!-- /.card -->
     </div>

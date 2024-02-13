@@ -1,0 +1,7 @@
+.idea
+.vs
+end
+weblog/local_settings.py
+account/migrations
+blogs/migrations
+home/migrations

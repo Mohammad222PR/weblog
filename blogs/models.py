@@ -35,9 +35,9 @@ class Tag(models.Model):
 
 class Article(models.Model):
     STATUS = [
-        ("Publish", "P"),
-        ("Unpublished", "U"),
-        ("Draft", "D")
+        ("Publish", "Publish"),
+        ("Unpublished", "Unpublished"),
+        ("Draft", "Draft")
     ]
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='articles')
@@ -49,7 +49,7 @@ class Article(models.Model):
     slug = models.SlugField(max_length=100, blank=True, null=True, unique=True)
     updated = models.DateTimeField(auto_now=True)
     favorite = models.ManyToManyField(User, default=None, blank=True, null=True, related_name='favorite')
-    status = models.CharField(max_length=20, choices=STATUS, default="D")
+    status = models.CharField(max_length=20, choices=STATUS, default="Draft")
 
     # custom_manager = ArticleManger()
 

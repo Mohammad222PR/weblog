@@ -12,7 +12,7 @@ class User(AbstractUser):
     special_user = models.DateTimeField(default=timezone.now(), verbose_name='special user')
 
     def is_special_user(self):
-        if self.special_user > timezone.now():
+        if self.special_user >= timezone.now():
             return True
         else:
             return False

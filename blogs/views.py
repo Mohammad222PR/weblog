@@ -20,7 +20,7 @@ class PostDetailView(View):
     def get(self, request, slug):
         article = get_object_or_404(Article, slug=slug)
         categories = Category.objects.all()
-        resent_article = Article.objects.filter(status='P').order_by("-updated")[:3]
+        resent_article = Article.objects.filter(status='Publish').order_by("-updated")[:3]
         if request.user.is_authenticated:
 
             if request.user.likes.filter(article__slug=slug, user_id=request.user.id).exists():

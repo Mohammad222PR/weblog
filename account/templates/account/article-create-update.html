@@ -2,9 +2,8 @@
 {% load crispy_forms_tags %}
 
 
-
 {% block head_title %}{% block title-head %}
-    
+
     Add Article
 {% endblock %}{% endblock %}
 
@@ -22,12 +21,17 @@
                 <form action="" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="row">
-                        <div class="col-6">
-                            {{ form.author|as_crispy_field }}
-                        </div>
-                        <div class="col-6">
+
+
+                            {% if request.user.is_superuser %}
+                            	<div class="col-6">
+                                {{ form.author|as_crispy_field }}
+                            </div>
+                            <div class="col-6">
                             {{ form.status|as_crispy_field }}
                         </div>
+                            {% endif %} 
+                        
                         <div class="col-6">
                             {{ form.category|as_crispy_field }}
                         </div>
@@ -40,8 +44,6 @@
                         <div class="col-6">
                             {{ form.slug|as_crispy_field }}
                         </div>
-
-
 
 
                         <div class="col-7">
