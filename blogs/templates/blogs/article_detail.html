@@ -63,7 +63,17 @@
                                             <li><a href="#">{{ article.created }}</a></li>
                                             <li><a href="#">{{ article.comments.count }} Comments</a></li>
                                         </ul>
-                                        <p>{{ article.body|safe  }}</p>
+                                        {% if article.is_special %}
+                                            {% if request.user.is_authenticated and request.user.is_special_user or article.author == request.user or request.user.is_superuser %}
+                                                <p>{{ article.body|safe }}</p>
+                                            {% else %}
+                                                <h1>If you wana see this post you need special account</h1>
+                                                <p>{{ article.body|truncatewords:1|safe }}</p>
+                                            {% endif %}
+
+                                        {% else %}
+                                            <p>{{ article.body|safe }}</p>
+                                        {% endif %}
 
                                         <div class="post-options">
                                             <div class="row">
@@ -91,7 +101,8 @@
 
                                                                 <a id="fave"
                                                                    onclick="fave({{ article.id }})"
-                                                                   style="font-size: 20px" class="fa fa-heart">favortie</a>
+                                                                   style="font-size: 20px"
+                                                                   class="fa fa-heart">favortie</a>
                                                             <li>
                                                                 <br>
                                                                 {% else %}
@@ -271,18 +282,19 @@
 
             })
         }
-            function fave(id) {
-                var element = document.getElementById("fave")
-                $.get(`/articles/favorite/${id}`).then(response => {
-                    if (response['response'] === "added") {
-                        element.className = 'fa fa-heart'
-                    } else {
-                        element.className = 'fa fa-heart-o'
 
-                    }
+        function fave(id) {
+            var element = document.getElementById("fave")
+            $.get(`/articles/favorite/${id}`).then(response => {
+                if (response['response'] === "added") {
+                    element.className = 'fa fa-heart'
+                } else {
+                    element.className = 'fa fa-heart-o'
 
-                })
-            }
+                }
+
+            })
+        }
 
     </script>
 

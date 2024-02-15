@@ -11,7 +11,7 @@ urlpatterns = [
     path('profile/edit/', views.profile_normal_user_view, name='profile-edit'),
     path('search/', views.article_search, name='search'),
     path('article/create', views.ArticleCreateView.as_view(), name='article-create'),
-    path('article/update/<slug:slug>', views.ArticleUpdateView.as_view(), name='article-update'),
+    path('article/update/<int:pk>', views.ArticleUpdateView.as_view(), name='article-update'),
     path('article/delete/<int:pk>', views.ArticleDeleteView.as_view(), name='article-delete')
 
 ]

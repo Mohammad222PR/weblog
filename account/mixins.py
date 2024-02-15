@@ -9,7 +9,7 @@ class FieldsMixin():
         if request.user.is_superuser:
             self.fields = "__all__"
         elif request.user.is_author:
-            self.fields = ['category', 'tag', 'title', 'body', 'image', 'slug']
+            self.fields = ['category', 'tag', 'title', 'body', 'image', 'slug', 'is_special']
         else:
             raise Http404("You can't see this page")
         return super().dispatch(request, *args, **kwargs)
@@ -26,10 +26,10 @@ class FormValidMixin():
         return super().form_valid(form)
 
 
-class ArticleUpdateMixin():
-    def dispatch(self, request, slug=None, *args, **kwargs):
-        article = get_object_or_404(Article, slug=slug)
-        if article.author == request.user and article.status == 'Draft' or request.user.is_superuser:
+class ArticleAccessMixin():
+    def dispatch(self, request, pk=None, *args, **kwargs):
+        article = get_object_or_404(Article, pk=pk)
+        if article.author == request.user and article.status in ['Draft', 'b'] or request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
         else:
             raise Http404("You can't see this page")
@@ -41,3 +41,11 @@ class ArticleDeleteMixin():
             return super().dispatch(request, *args, **kwargs)
         else:
             raise Http404("You can't delete this post")
+
+
+class ProfileMixin():
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_superuser or request.user.is_author or request.user.is_staff:
+            return super().dipatch(request, *args, **kwargs)
+        else:
+            raise Http404("You can't see this page")

@@ -11,8 +11,8 @@
 
 
 
-        <div class="row">
-            <div class="col-12">
+    <div class="row">
+        <div class="col-12">
             {% if articles %}
                 <div class="card">
                     <div class="card-header">
@@ -38,11 +38,11 @@
 
                     </div>
                 </div>
-            </div>
+                </div>
 
-            <!-- /.card-header -->
+                <!-- /.card-header -->
 
-    <div class="card-body table-responsive p-0">
+                <div class="card-body table-responsive p-0">
                 <table class="table table-hover">
                     <thead>
                     <tr>
@@ -52,6 +52,7 @@
                         <th>تگ</th>
                         <th>نوسینده</th>
                         <th>متن</th>
+                        <th>مقاله ویژه</th>
                         <th>تاریخ انتشار</th>
                         <th>تاریخ بروزرسانی</th>
                         <th>وضعیت</th>
@@ -73,15 +74,22 @@
                             {% endfor %}</td>
                         <td>{{ article.author }}</td>
                         <td>{{ article.body|striptags|truncatewords:10 }}</td>
+                        <td>
+                            {% if article.is_special %}
+                                <span class="fa fa-check-circle" style="color: green"></span>
+
+                            {% else %}
+                                <span class="fa fa-minus-circle" style="color: red"></span>
+
+                            {% endif %}
+                        </td>
                         <td>{{ article.created|date:"Y-M-W" }}</td>
                         <td>{{ article.updated|date:"Y-M-W" }}</td>
 
                         <td>
 
 
-
-
-                       {% if article.status == "Publish" %}
+                            {% if article.status == "Publish" %}
                                 <span class="badge badge-success">انتشار</span>
                                 <br>
                                 <br>
@@ -89,25 +97,42 @@
                                    class="badge badge-primary">نشون دادن داخل سایت</a>
                             {% elif article.status == "Draft" %}
                                 <span class="badge badge-warning">پیش نویس</span>
+                                {% if request.user.is_author or request.user.is_superuser and article.status == 'Draft' %}
+                                    <a target="_blank" href="{% url 'blog:article_preview' article.pk %}"
+                                       class="badge badge-primary">دیدن پیش نمایش</a>
+                                {% endif %}
 
+                            {% elif article.status == "b" %}
+                                <span class="badge" style="background: #ffabbb">برگشت خورده</span>
+                                {% if request.user.is_author or request.user.is_superuser and article.status == 'b' %}
+                                    <a target="_blank" href="{% url 'blog:article_preview' article.pk %}"
+                                       class="badge badge-primary">دیدن پیش نمایش</a>
+                                {% endif %}
+                            {% elif article.status == "I" %}
+                                <span class="badge badge-primary" style="background: #75b6f1">درحال بررسی</span>
+                                {% if request.user.is_superuser and article.status == 'I' %}
+                                    <a target="_blank" href="{% url 'blog:article_preview' article.pk %}"
+                                       class="badge badge-primary">دیدن پیش نمایش</a>
+                                {% endif %}
                             {% else %}
                                 <span class="badge badge-danger">بسته</span>
                             {% endif %}
                             <br><br>
-                        {% if request.user.is_superuser %}
-                            <a href="{% url 'account:article-delete' article.pk %}" class="badge badge-danger">حذف</a>
-                        {% endif %}
+                            {% if request.user.is_superuser %}
+                                <a href="{% url 'account:article-delete' article.pk %}"
+                                   class="badge badge-danger">حذف</a>
+                            {% endif %}
                         </td>
                         {% if article.status == 'Publish' and request.user.is_superuser %}
 
                             <td>
-                                <a href="{% url 'account:article-update' article.slug %}"
+                                <a href="{% url 'account:article-update' article.pk %}"
                                    class="nav-icon fas fa-edit"></a>
                             </td>
-                        {% elif article.status == 'Draft' and request.user.is_author or request.user.is_superuser %}
+                        {% elif article.status == 'Draft' or article.status == 'b' and request.user.is_author or request.user.is_superuser %}
 
                             <td>
-                                <a href="{% url 'account:article-update' article.slug %}"
+                                <a href="{% url 'account:article-update' article.pk %}"
                                    class="nav-icon fas fa-edit"></a>
                             </td>
                             </td>
@@ -122,14 +147,14 @@
 
                     </tbody>
                 </table>
-    {% else %}
+            {% else %}
                 <h3>مقاله ای وجود ندارد.</h3>
-{% endif %}
+            {% endif %}
             </div>
-        </div>
-        <!-- /.card-body -->
-        </div>
-        <!-- /.card -->
+    </div>
+    <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
     </div>
     </div>
     <!-- Content Wrapper. Contains page content -->

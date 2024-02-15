@@ -23,15 +23,15 @@
                     <div class="row">
 
 
-                            {% if request.user.is_superuser %}
-                            	<div class="col-6">
+                        {% if request.user.is_superuser %}
+                            <div class="col-6">
                                 {{ form.author|as_crispy_field }}
                             </div>
                             <div class="col-6">
-                            {{ form.status|as_crispy_field }}
-                        </div>
-                            {% endif %} 
-                        
+                                {{ form.status|as_crispy_field }}
+                            </div>
+                        {% endif %}
+
                         <div class="col-6">
                             {{ form.category|as_crispy_field }}
                         </div>
@@ -45,7 +45,9 @@
                             {{ form.slug|as_crispy_field }}
                         </div>
 
-
+                        <div class="col-6">
+                            {{ form.is_special|as_crispy_field }}
+                        </div>
                         <div class="col-7">
                             {{ form.body|as_crispy_field }}
                         </div>
@@ -55,7 +57,13 @@
 
 
                     </div>
-                    <button class="btn btn-success" type="submit">Submit</button>
+                    <button class="btn btn-success" type="submit">ارسال مقاله</button>
+                    {% if request.user.is_superuser and request.resolver_match.kwargs.pk %}
+
+                        <a href="{% url 'account:article-delete' request.resolver_match.kwargs.pk %}"
+                           class="btn btn-danger">حذف</a>
+
+                    {% endif %}
                 </form>
             </div>
         </div>

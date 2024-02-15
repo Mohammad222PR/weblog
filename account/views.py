@@ -4,7 +4,7 @@ from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 
-from account.mixins import FieldsMixin, FormValidMixin, ArticleUpdateMixin, ArticleDeleteMixin
+from account.mixins import FieldsMixin, FormValidMixin, ArticleAccessMixin, ArticleDeleteMixin, ProfileMixin
 from account.models import User
 from django.urls import reverse_lazy
 
@@ -78,7 +78,7 @@ class ProfileView(LoginRequiredMixin, View):
             elif user.is_author or user.is_staff:
                 articles = Article.objects.filter(author=request.user).order_by('-created')
             else:
-                return redirect('account:profile-edit', user.id)
+                return redirect('account:profile-edit')
         return render(request, 'account/index.html', {'form': form, 'articles': articles})
 
 
@@ -110,15 +110,19 @@ class ArticleCreateView(FieldsMixin, LoginRequiredMixin, FormValidMixin, generic
     success_url = reverse_lazy('account:profile')
 
 
-class ArticleUpdateView(FieldsMixin, LoginRequiredMixin, ArticleUpdateMixin, FormValidMixin, generic.UpdateView):
+class ArticleUpdateView(FieldsMixin, LoginRequiredMixin, ArticleAccessMixin, FormValidMixin, generic.UpdateView):
     model = Article
     fields = '__all__'
     template_name = 'account/article-create-update.html'
     success_url = reverse_lazy('account:profile')
 
 
+class ProfileView(ProfileMixin, generic.DeleteView):
+    model = User
+    template_name = 'account/article-create-update.html'
+
+
 class ArticleDeleteView(LoginRequiredMixin, ArticleDeleteMixin, generic.DeleteView):
     model = Article
     template_name = 'account/article_confirm_delete.html'
     success_url = reverse_lazy('account:profile')
-
