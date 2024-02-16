@@ -46,4 +46,24 @@ class LoginForm(forms.Form):
 class EditAccountForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ('username', 'email', 'first_name','last_name',)
+        fields = ('username', 'email', 'first_name', 'last_name',)
+
+
+class ProfileForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user')
+        super(ProfileForm, self).__init__(*args, **kwargs)
+        # help texts
+        self.fields[
+            'username'].help_text = 'لطفا نام کاربری خود را فارسی بنویسید و از علامت ها ی@ # $@ |/ استفاده نکنید'
+        # disabled form
+        if not user.is_superuser:
+            self.fields['email'].disabled = True
+            self.fields['is_superuser'].disabled = True
+            self.fields['is_author'].disabled = True
+            self.fields['is_staff'].disabled = True
+            self.fields['username'].disabled = True
+
+    class Meta:
+        model = User
+        fields = ('username', 'first_name', 'last_name', 'email', 'is_superuser', 'is_author', 'is_staff')

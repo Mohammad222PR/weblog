@@ -72,7 +72,7 @@
             </span>
                             {% endif %}
                         {% if request.user.is_superuser or request.user.is_staff %}
-                        	<a class="nav-link" href="{% url 'account:profile' %}"
+                        	<a class="nav-link" href="{% url 'account:home' %}"
 
                         {% else %}
                             <a class="nav-link" href="{% url 'account:profile-edit' %}"

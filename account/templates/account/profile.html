@@ -1,0 +1,71 @@
+{% extends 'base_lte.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block head_title %}{% block title-head %}
+
+    Add Article
+{% endblock %}{% endblock %}
+
+{% block nav_title %}
+    Add Article
+{% endblock %}
+{% block content %}
+    <div class="col-md-12" style="padding-right: 30px;padding-left: 30px">
+        <div class="card card-primary">
+            <div class="card-header" style="align-content: center">
+                <h3 class="card-title mb-0 float-left">حساب کاربری </h3>
+            </div>
+
+            <div style="padding-right: 20px;">
+                <form action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div>
+                            {% if form.errors %}
+                                <span class="badge badge-danger">
+
+                                <div class="errors">
+                                    {% for error in form.errors %}
+                                        <spam>{{ error }}</spam>
+                                    {% endfor %}
+
+                           </span>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-6">
+                            {{ form.username|as_crispy_field }}
+                        </div>
+                        <div class="col-6">
+                            {{ form.first_name|as_crispy_field }}
+                        </div>
+
+                        <div class="col-6">
+                            {{ form.last_name|as_crispy_field }}
+                        </div>
+
+                        <div class="col-6">
+                            {{ form.email|as_crispy_field }}
+                        </div>
+                        <div>
+                            <div class="col-6">
+                                {{ form.is_superuser|as_crispy_field }}
+                            </div>
+                            <div class="col-6">
+                                {{ form.is_author|as_crispy_field }}
+                            </div>
+                            <div class="col-6">
+                                {{ form.is_staff|as_crispy_field }}
+                            </div>
+                        </div>
+                    
+
+                    </div>
+                    <button class="btn btn-success" type="submit">ویرایش اطلاعات</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
