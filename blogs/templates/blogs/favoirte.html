@@ -15,6 +15,9 @@
                         <div class="row">
                                 <div class="col-lg-6">
                                     <div class="blog-post">
+                                    {% if article.is_special %}
+                                    	<span class="badge badge-danger">ویژه</span>
+                                    {% endif %}
                                         <div class="blog-thumb">
                                             <img src="{{ article.image.url }}" alt="">
                                         </div>

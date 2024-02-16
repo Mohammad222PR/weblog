@@ -30,6 +30,21 @@
                             <div class="col-6">
                                 {{ form.status|as_crispy_field }}
                             </div>
+                            {% else %}
+                            <div class="col-6">
+                            <div class="form_group" id="id_status">
+                                <label for="id_status" class="requiredField">
+                                    وضعیت<span class="asteriskField">*</span>
+                                </label>
+                                <div class="">
+                                    <select name="status" id="id_status" class="select form-control" required="">
+                                        <option value="">---------</option>
+                                        <option value="Draft">پیش نویس</option>
+                                        <option value="I">ارسال برای بررسی</option>
+                                    </select>
+                                </div>
+                            </div>
+                            </div>
                         {% endif %}
 
                         <div class="col-6">

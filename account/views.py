@@ -7,9 +7,9 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 from account.mixins import (
     FieldsMixin,
     FormValidMixin,
-    ArticleAccessMixin,
+    AuthorAccessMixin,
     ArticleDeleteMixin,
-    ProfileMixin,
+    ProfileMixin, AuthorsAccessMixin,
 )
 from account.models import User
 from django.urls import reverse_lazy
@@ -78,7 +78,7 @@ def logout(request):
         return redirect("home:home")
 
 
-class AccountHomeView(LoginRequiredMixin, View):
+class AccountHomeView(LoginRequiredMixin, AuthorsAccessMixin, View):
     def get(self, request):
         user = request.user
         form = EditAccountForm(instance=user)
@@ -129,7 +129,7 @@ class ArticleCreateView(
 class ArticleUpdateView(
     FieldsMixin,
     LoginRequiredMixin,
-    ArticleAccessMixin,
+    AuthorAccessMixin,
     FormValidMixin,
     generic.UpdateView,
 ):

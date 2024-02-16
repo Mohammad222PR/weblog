@@ -1,4 +1,4 @@
-from account.mixins import ArticleAccessMixin
+from account.mixins import AuthorAccessMixin
 from account.models import User
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
@@ -201,7 +201,7 @@ class FaveView(ListView):
         return Article.objects.filter(favorite=self.request.user)
 
 
-class ArticlePreviewView(LoginRequiredMixin, ArticleAccessMixin, DetailView):
+class ArticlePreviewView(LoginRequiredMixin, AuthorAccessMixin, DetailView):
     def get_object(self):
         pk = self.kwargs.get('pk')
         return get_object_or_404(Article, pk=pk)

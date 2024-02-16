@@ -7,7 +7,7 @@
     Article
 {% endblock %}
 {% block content %}
-    
+
     <div class="row">
         <div class="col-12">
             {% if articles %}
@@ -107,6 +107,7 @@
                                 {% endif %}
                             {% elif article.status == "I" %}
                                 <span class="badge badge-primary" style="background: #75b6f1">درحال بررسی</span>
+                                <br><br>
                                 {% if request.user.is_superuser and article.status == 'I' %}
                                     <a target="_blank" href="{% url 'blog:article_preview' article.pk %}"
                                        class="badge badge-primary">دیدن پیش نمایش</a>
