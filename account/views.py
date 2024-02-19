@@ -1,5 +1,7 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import PasswordContextMixin, PasswordChangeView, PasswordChangeDoneView
 from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
@@ -158,3 +160,5 @@ class ArticleDeleteView(LoginRequiredMixin, ArticleDeleteMixin, generic.DeleteVi
     model = Article
     template_name = "account/article_confirm_delete.html"
     success_url = reverse_lazy("account:home")
+
+

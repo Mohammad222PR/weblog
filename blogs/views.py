@@ -205,4 +205,3 @@ class ArticlePreviewView(LoginRequiredMixin, AuthorAccessMixin, DetailView):
     def get_object(self):
         pk = self.kwargs.get('pk')
         return get_object_or_404(Article, pk=pk)
-

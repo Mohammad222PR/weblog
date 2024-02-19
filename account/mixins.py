@@ -1,15 +1,16 @@
 from django.http import Http404
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404
 
 from blogs.models import Article
 
 
 class FieldsMixin():
     def dispatch(self, request, *args, **kwargs):
+        self.fields = ['category', 'tag', 'title', 'body', 'image', 'slug', 'is_special','status']
+
         if request.user.is_superuser:
-            self.fields = "__all__"
-        elif request.user.is_author:
-            self.fields = ['category', 'tag', 'title', 'body', 'image', 'slug', 'is_special', 'status']
+            self.fields.append('author')
+
         else:
             raise Http404("You can't see this page")
         return super().dispatch(request, *args, **kwargs)
@@ -22,6 +23,8 @@ class FormValidMixin():
         else:
             self.obj = form.save(commit=False)
             self.obj.author = self.request.user
+            if self.obj.status != 'I':
+                self.obj.status = 'Draft'
         return super().form_valid(form)
 
 
@@ -37,12 +40,12 @@ class AuthorAccessMixin():
 class AuthorsAccessMixin():
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            if request.user.is_superuser or request.user.is_author or request.user.is_staff:
+            if request.user.is_superuser or request.user.is_staff or request.user.is_author:
                 return super().dispatch(request, *args, **kwargs)
             else:
-                return redirect('account:profile-edit')
+                raise Http404("You can't see this page")
         else:
-            return redirect('home:home ')
+            raise Http404("You can't see this page")
 
 
 class ArticleDeleteMixin():

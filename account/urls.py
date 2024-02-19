@@ -1,3 +1,4 @@
+from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView
 from django.urls import path
 from . import views
 
@@ -13,6 +14,6 @@ urlpatterns = [
     path('article/create', views.ArticleCreateView.as_view(), name='article-create'),
     path('article/update/<int:pk>', views.ArticleUpdateView.as_view(), name='article-update'),
     path('article/delete/<int:pk>', views.ArticleDeleteView.as_view(), name='article-delete'),
-    path('profile', views.ProfileUpdateView.as_view(), name='profile')
+    path('profile', views.ProfileUpdateView.as_view(), name='profile'),
 
 ]
