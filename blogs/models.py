@@ -53,6 +53,8 @@ class Article(models.Model):
     is_special = models.BooleanField(default=False)
     favorite = models.ManyToManyField(User, default=None, blank=True, null=True, related_name='favorite')
     status = models.CharField(max_length=20, choices=STATUS, default="Draft")
+    hints = models.ManyToManyField('IPAddress', through='ArticleHint', blank=True, null=True,
+                                   related_name='hints')
 
     # custom_manager = ArticleManger()
 
@@ -106,3 +108,13 @@ class Contact(models.Model):
 class Like(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='likes')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='likes')
+
+
+class IPAddress(models.Model):
+    ip_address = models.GenericIPAddressField()
+
+
+class ArticleHint(models.Model):
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='article_hint')
+    ip_address = models.ForeignKey(IPAddress, on_delete=models.CASCADE, related_name='article_hint')
+    created = models.DateTimeField(auto_now_add=True)

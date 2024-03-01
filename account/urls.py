@@ -1,5 +1,5 @@
 from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView
-from django.urls import path
+from django.urls import path, re_path
 from . import views
 
 app_name = 'account'
@@ -7,7 +7,9 @@ app_name = 'account'
 urlpatterns = [
     path('login/', views.login, name='user_login'),
     path('logout/', views.logout, name='user_logout'),
-    path('register/', views.register, name='user_register'),
+    path('register/', views.Register.as_view(), name='user_register'),
+    path('activate/<str:uidb64>/<str:token>/', views.activate, name='activate'),
+
     path('home/', views.AccountHomeView.as_view(), name='home'),
     path('profile/edit/', views.profile_normal_user_view, name='profile-edit'),
     path('search/', views.article_search, name='search'),

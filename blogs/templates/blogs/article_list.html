@@ -63,6 +63,7 @@
 
                                         </div>
                                         <div class="down-content">
+                                        <div><b>بازدید ها :</b>{{ article.hints.count }}</div>
                                             <span>{{ article.category }}</span>
                                             <a href="{% url 'blog:blog_detail' article.slug %}">
                                                 <h4>{{ article.title }}</h4></a>

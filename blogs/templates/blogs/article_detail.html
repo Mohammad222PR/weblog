@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load ratings %}
+
 {% block contact %}
 
     <!-- Page Content -->
@@ -61,6 +63,8 @@
                                     <div class="down-content">
                                         <span>{{ article.category }}</span>
                                         <a href="post-details.html"><h4>{{ article.title }}</h4></a>
+                                                                                    <div>{% ratings article %}</div>
+                                                <div><b>بازدید ها :</b>{{ article.hints.count }}</div>
                                         <ul class="post-info">
                                             <li><a href="#">{{ article.author }}</a></li>
                                             <li><a href="#">{{ article.created }}</a></li>

@@ -1,3 +1,5 @@
+from datetime import timezone, timedelta, datetime
+
 from account.mixins import AuthorAccessMixin
 from account.models import User
 from django.http import JsonResponse
@@ -10,6 +12,7 @@ from django.urls import reverse, reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from blogs.forms import ContactForm, CommentForm
 from blogs.models import Article, Category, Tag, Comment, Contact, Like
+from django.db.models import Count, Q
 
 
 # Create your views here
@@ -22,6 +25,9 @@ class PostDetailView(View):
         article = get_object_or_404(Article, slug=slug)
         categories = Category.objects.all()
         resent_article = Article.objects.filter(status='Publish').order_by("-updated")[:3]
+        ip_address = request.user.ip_address
+        if ip_address not in article.hints.all():
+            article.hints.add(ip_address)
         if request.user.is_authenticated:
 
             if request.user.likes.filter(article__slug=slug, user_id=request.user.id).exists():
@@ -37,6 +43,7 @@ class PostDetailView(View):
             return render(request, 'blogs/article_detail.html',
                           {'article': article, 'resent_article': resent_article, 'categories': categories,
                            'is_likes': is_likes, 'is_fave': is_fave})
+
         else:
             return render(request, 'blogs/article_detail.html',
                           {'article': article, 'resent_article': resent_article, 'categories': categories})
@@ -63,7 +70,9 @@ class DeleteCommentView(View):
 
 class PostListView(View):
     def get(self, request):
-        articles = Article.objects.filter(status="Publish")
+        last_month = datetime.today() - timedelta(days=30)
+        articles = Article.objects.filter(status="Publish").annotate(
+            count=Count('hints', filter=Q(article_hint__created__gt=last_month))).order_by('-count', '-created')[:5]
         tags = Tag.objects.all()
         categories = Category.objects.all()
         page_number = request.GET.get('page')
